@@ -19,7 +19,14 @@
 import MdHead from './components/header';
 import bus from './lib/bus.js';
 import markdown from 'markdown-it'
-import './assets/misty-light-macos.css'
+import hljs from 'highlight.js';
+import markdownItMark from 'markdown-it-mark';
+import markdownItIns from 'markdown-it-ins';
+import markdownItEmoji from 'markdown-it-emoji';
+// import './assets/misty-light-macos.css'
+import './assets/theme.css'
+import 'highlight.js/styles/default.css'
+
 export default {
   name: 'App',
   components: {
@@ -30,7 +37,16 @@ export default {
       loading: true,
       editorContent: '',
       result: '',
-      markdown: new markdown()
+      markdown: new markdown({
+        highlight: function (str, lang) {
+          if (lang && hljs.getLanguage(lang)) {
+            try {
+              return hljs.highlight(lang, str).value;
+            } catch (__) { }
+          }
+          return ''; // 使用额外的默认转义
+        }
+      }).use(markdownItMark).use(markdownItIns).use(markdownItEmoji).use(require('markdown-it-footnote'))
     }
   },
   mounted () {
@@ -45,7 +61,9 @@ export default {
      * 导出文件
     */
     bus.$on('export', () => {
-      if (!this.editorContent || !window.localStorage.getItem('MarkdownDraft')) return this.$Notice.error({ title: '你还没有写内容' })
+      if (!this.editorContent || !window.localStorage.getItem('MarkdownDraft')) {
+        return this.$Notice.error({ title: '你还没有写内容' })
+      }
       const content = this.editorContent
       const elem = document.createElement('a');
       elem.download = 'draft.md';
@@ -60,6 +78,7 @@ export default {
         window.localStorage.removeItem('MarkdownDraft')
       }, 300)
     })
+
     this.loading = false //关闭等待
     if (!window.localStorage.getItem('MarkdownDraft')) return
     this.editorContent = window.localStorage.getItem('MarkdownDraft')
@@ -74,7 +93,7 @@ export default {
     autoSave () { // 自动保存
       window.localStorage.setItem('MarkdownDraft', this.editorContent)
     },
-    insertAtCursor (myValue) {
+    insertAtCursor (myValue) { // 插入到光标所在位置
       const myField = document.querySelector('textarea')
 
       //IE 浏览器

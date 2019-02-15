@@ -22,13 +22,13 @@
           </Tooltip>
         </div>
       </i-col>
-      <!-- <i-col class="center" span="1">
-        <div class="m_action_item">
-          <Tooltip content="标注">
+      <i-col class="center" span="1">
+        <div @click="mark" class="m_action_item">
+          <Tooltip content="标记">
             <span class="iconfont icon-biaozhu"></span>
           </Tooltip>
         </div>
-      </i-col> -->
+      </i-col>
       <i-col class="center" span="1">
         <div @click="h1" class="m_action_item">
           <Tooltip content="一级标题">
@@ -154,39 +154,50 @@ export default {
       bus.$emit('insert', '~~text~~')
     },
     h1 () {
-      bus.$emit('insert', '# text')
+      bus.$emit('insert', `
+# text`)
     },
     h2 () {
-      bus.$emit('insert', '## text')
+      bus.$emit('insert', `
+## text`)
     },
     h3 () {
-      bus.$emit('insert', '### text')
+      bus.$emit('insert', `
+### text`)
     },
     h4 () {
-      bus.$emit('insert', '#### text')
+      bus.$emit('insert', `
+#### text`)
     },
     h5 () {
-      bus.$emit('insert', '##### text')
+      bus.$emit('insert', `
+##### text`)
     },
     h6 () {
-      bus.$emit('insert', '###### text')
+      bus.$emit('insert', `
+###### text`)
     },
     devider () {
-      bus.$emit('insert', '---')
+      bus.$emit('insert', `
+---`)
     },
     quot () {
-      bus.$emit('insert', '> text')
+      bus.$emit('insert', `
+> text`)
     },
     unorder () {
-      bus.$emit('insert', `- text-1
-- text-2`)
+      bus.$emit('insert', `
+- text - 1
+- text - 2`)
     },
     order () {
-      bus.$emit('insert', `1. text-1
-1. text-2 `)
+      bus.$emit('insert', `
+1. text - 1
+1. text - 2 `)
     },
     code () {
-      bus.$emit('insert', `\`\`\`
+      bus.$emit('insert', `
+\`\`\`
 it's your code here!
 \`\`\``)
     },
@@ -235,10 +246,14 @@ it's your code here!
       })
     },
     table () {
-      bus.$emit('insert', `1header 1 | header 2
+      bus.$emit('insert', `
+1header 1 | header 2
 ---|---
 text1 | text2
 text1 | text2`)
+    },
+    mark () {
+      bus.$emit('insert', `==text==`)
     },
     makeFile () {
       if (!('download' in document.createElement('a'))) return this.$Notice.error({ title: '浏览器不支持' })
