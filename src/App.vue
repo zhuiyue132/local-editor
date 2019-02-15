@@ -20,7 +20,6 @@ import hljs from 'highlight.js';
 import markdownItMark from 'markdown-it-mark';
 import markdownItIns from 'markdown-it-ins';
 import markdownItEmoji from 'markdown-it-emoji';
-// import './assets/misty-light-macos.css'
 import './assets/theme.css'
 import 'highlight.js/styles/default.css'
 
@@ -42,10 +41,11 @@ export default {
           }
           return ''; // 使用额外的默认转义
         }
-      }).use(markdownItMark).use(markdownItIns).use(markdownItEmoji).use(require('markdown-it-footnote'))
+      }).use(markdownItMark).use(markdownItIns).use(markdownItEmoji).use(require('markdown-it-footnote')).use(require('markdown-it-task-checkbox'))
     }
   },
   mounted () {
+    console.log('不是所有的事情都能如愿以偿，但是任何事情都值得去尝试。加油！')
     /** 
      * 操作按钮插入内容
     */
@@ -142,6 +142,9 @@ textarea.ivu-input {
   &:focus {
     box-shadow: none;
   }
+}
+.task-list {
+  list-style: none;
 }
 #app {
   color: #2c3e50;

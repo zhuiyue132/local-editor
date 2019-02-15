@@ -18,6 +18,7 @@
     "markdown-it-footnote": "^3.0.1",
     "markdown-it-ins": "^2.0.0",
     "markdown-it-mark": "^2.0.0",
+    "markdown-it-task-checkbox": "^1.0.6",
     "vue": "^2.5.2"
   },
   "devDependencies": {
