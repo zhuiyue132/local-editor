@@ -9,9 +9,6 @@
         <div v-html="result"></div>
       </div>
     </div>
-    <Spin v-if="loading" fix>
-      <Icon type="ios-loading" size=75 class="demo-spin-icon-load"></Icon>
-    </Spin>
   </div>
 </template>
 
@@ -34,7 +31,6 @@ export default {
   },
   data () {
     return {
-      loading: true,
       editorContent: '',
       result: '',
       markdown: new markdown({
@@ -79,7 +75,6 @@ export default {
       }, 300)
     })
 
-    this.loading = false //关闭等待
     if (!window.localStorage.getItem('MarkdownDraft')) return
     this.editorContent = window.localStorage.getItem('MarkdownDraft')
   },
@@ -138,20 +133,6 @@ html,
 body {
   width: 100%;
   height: 100%;
-}
-@keyframes ani-demo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(180deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-.demo-spin-icon-load {
-  animation: ani-demo-spin 1s linear infinite;
 }
 textarea.ivu-input {
   height: 100% !important;

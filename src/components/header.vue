@@ -1,132 +1,21 @@
 <template>
   <div class="header">
     <Row>
-      <i-col class="center" span="1">
-        <div @click="blod" class="m_action_item">
-          <Tooltip content="加粗">
-            <span class="iconfont icon-jiacu"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="italic" class="m_action_item">
-          <Tooltip content="倾斜">
-            <span class="iconfont icon-qingxie"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="linethrough" class="m_action_item">
-          <Tooltip content="删除线">
-            <span class="iconfont icon-shanchuxian"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="mark" class="m_action_item">
-          <Tooltip content="标记">
-            <span class="iconfont icon-biaozhu"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="h1" class="m_action_item">
-          <Tooltip content="一级标题">
-            <span class="iconfont icon-h1"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="h2" class="m_action_item">
-          <Tooltip content="二级标题">
-            <span class="iconfont icon-h2"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="h3" class="m_action_item">
-          <Tooltip content="三级标题">
-            <span class="iconfont icon-h3"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="h4" class="m_action_item">
-          <Tooltip content="四级标题">
-            <span class="iconfont icon-h4"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="h5" class="m_action_item">
-          <Tooltip content="五级标题">
-            <span class="iconfont icon-h5"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="h6" class="m_action_item">
-          <Tooltip content="六级标题">
-            <span class="iconfont icon-h6"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="devider" class="m_action_item">
-          <Tooltip content="分割线">
-            <span class="iconfont icon-fengexian"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="quot" class="m_action_item">
-          <Tooltip content="引用">
-            <span class="iconfont icon-yinyong"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="unorder" class="m_action_item">
-          <Tooltip content="无序列表">
-            <span class="iconfont icon-wuxuliebiao"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="order" class="m_action_item">
-          <Tooltip content="有序列表">
-            <span class="iconfont icon-youxuliebiao"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="code" class="m_action_item">
-          <Tooltip content="代码块">
-            <span class="iconfont icon-code"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="link" class="m_action_item">
-          <Tooltip content="插入链接">
-            <span class="iconfont icon-link"></span>
-          </Tooltip>
-        </div>
-      </i-col>
-      <i-col class="center" span="1">
+      <!-- <i-col class="center" span="1">
         <div class="m_action_item">
           <Tooltip content="插入图片">
             <span class="iconfont icon-tupian"></span>
           </Tooltip>
         </div>
-      </i-col>
-      <i-col class="center" span="1">
-        <div @click="table" class="m_action_item">
-          <Tooltip content="插入表格">
-            <span class="iconfont icon-biaoge"></span>
+      </i-col> -->
+      <i-col v-for="(item,index) in actionBtnList" :key="index" class="center" span="1">
+        <div @click="insert(item.template, item.isSpecial)" class="m_action_item">
+          <Tooltip :content="item.desc">
+            <span class="iconfont" :class="item.icon"></span>
           </Tooltip>
         </div>
       </i-col>
+
       <i-col class="center" span="1">
         <Button @click="makeFile" type="primary">导出 markdown</Button>
       </i-col>
@@ -139,67 +28,106 @@ export default {
   name: 'Header',
   data () {
     return {
-      linkText: '',
-      linkAddress: ''
+      linkText: '', // 链接文字
+      linkAddress: '', // 链接地址
+      actionBtnList: [ // 操作按钮
+        {
+          desc: '加粗',
+          template: ' **text** ',
+          icon: 'icon-jiacu'
+        }, {
+          desc: '倾斜',
+          template: ' *text* ',
+          icon: 'icon-qingxie'
+        }, {
+          desc: '删除线',
+          template: ' ~~text~~ ',
+          icon: 'icon-shanchuxian'
+        }, {
+          desc: '插入链接',
+          template: 'link',
+          isSpecial: true, // 特殊标记，当存在特殊标记时，template作为该按钮调用的函数名传入
+          icon: 'icon-link'
+        }, {
+          desc: '标记',
+          template: ` ==text== `,
+          icon: 'icon-biaozhu'
+        }, {
+          desc: '一级标题',
+          template: `
+# text`,
+          icon: 'icon-h1'
+        }, {
+          desc: '二级标题',
+          template: `
+## text`,
+          icon: 'icon-h2'
+        }, {
+          desc: '三级标题',
+          template: `
+### text`,
+          icon: 'icon-h3'
+        }, {
+          desc: '四级标题',
+          template: `
+#### text`,
+          icon: 'icon-h4'
+        }, {
+          desc: '五级标题',
+          template: `
+##### text`,
+          icon: 'icon-h5'
+        }, {
+          desc: '六级标题',
+          template: `
+###### text`,
+          icon: 'icon-h6'
+        }, {
+          desc: '分割线',
+          template: `
+---`,
+          icon: 'icon-fengexian'
+        },
+        {
+          desc: '引用',
+          template: `
+> text`,
+          icon: 'icon-yinyong'
+        }, {
+          desc: '无序列表',
+          template: `
+- text - 1
+- text - 2`,
+          icon: 'icon-wuxuliebiao'
+        }, {
+          desc: '有序列表',
+          template: `
+1. text - 1
+1. text - 2 `,
+          icon: 'icon-youxuliebiao'
+        }, {
+          desc: '代码块',
+          template: `
+\`\`\`
+code here!
+\`\`\``,
+          icon: 'icon-code'
+        }, {
+          desc: '插入表格',
+          template: `
+1header 1 | header 2
+---|---
+text1 | text2
+text1 | text2`,
+          icon: 'icon-biaoge'
+        }
+      ]
     }
   },
   methods: {
-    blod () {
-      bus.$emit('insert', '**text**')
-    },
-    italic () {
-      bus.$emit('insert', '*text*')
-    },
-    linethrough () {
-      bus.$emit('insert', '~~text~~')
-    },
-    h1 () {
-      bus.$emit('insert', `
-# text`)
-    },
-    h2 () {
-      bus.$emit('insert', `
-## text`)
-    },
-    h3 () {
-      bus.$emit('insert', `
-### text`)
-    },
-    h4 () {
-      bus.$emit('insert', `
-#### text`)
-    },
-    h5 () {
-      bus.$emit('insert', `
-##### text`)
-    },
-    h6 () {
-      bus.$emit('insert', `
-###### text`)
-    },
-    devider () {
-      bus.$emit('insert', `
----`)
-    },
-    quot () {
-      bus.$emit('insert', `
-> text`)
-    },
-    unorder () {
-      bus.$emit('insert', `
-- text - 1
-- text - 2`)
-    },
-    order () {
-      bus.$emit('insert', `
-1. text - 1
-1. text - 2 `)
-    },
-    code () {
-      bus.$emit('insert', `
-\`\`\`
-it's your code here!
-\`\`\``)
+    insert (temp, isSpecial = false) {
+      if (!isSpecial) bus.$emit('insert', temp)
+      else this[temp]()
     },
     link () {
       const _this = this
@@ -244,16 +172,6 @@ it's your code here!
           bus.$emit('insert', `[${_this.linkText}](${_this.linkAddress})`)
         }
       })
-    },
-    table () {
-      bus.$emit('insert', `
-1header 1 | header 2
----|---
-text1 | text2
-text1 | text2`)
-    },
-    mark () {
-      bus.$emit('insert', `==text==`)
     },
     makeFile () {
       if (!('download' in document.createElement('a'))) return this.$Notice.error({ title: '浏览器不支持' })
