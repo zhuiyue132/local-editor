@@ -118,7 +118,7 @@ export default {
         }, {
           desc: '分割线',
           template: `
----`,
+***`,
           icon: 'icon-fengexian'
         }, {
           desc: '待办',
