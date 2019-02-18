@@ -1,24 +1,52 @@
 <template>
   <div class="header">
     <Row>
-      <!-- <i-col class="center" span="1">
-        <div class="m_action_item">
-          <Tooltip content="插入图片">
-            <span class="iconfont icon-tupian"></span>
-          </Tooltip>
-        </div>
-      </i-col> -->
       <i-col v-for="(item,index) in actionBtnList" :key="index" class="center" span="1">
-        <div @click="insert(item.template, item.isSpecial)" class="m_action_item">
+        <div @click="insert(item.template, item.isSpecial, item.bothEnds)" class="m_action_item">
           <Tooltip :content="item.desc">
             <span class="iconfont" :class="item.icon"></span>
           </Tooltip>
         </div>
       </i-col>
-
       <i-col class="center" span="1">
-        <Button @click="makeFile" type="primary">导出文件</Button>
+        <Dropdown @on-click="goToGithub">
+          <a href="javascript:void(0)">
+            快捷键
+            <Icon type="ios-arrow-down"></Icon>
+          </a>
+          <DropdownMenu slot="list">
+            <DropdownItem>
+              ctrl/⌘+2 = H2标题
+            </DropdownItem>
+            <DropdownItem>
+              ctrl/⌘+3 = H3标题
+            </DropdownItem>
+            <DropdownItem disabled>
+              快捷键不支持其他等级标题
+            </DropdownItem>
+            <DropdownItem>
+              ctrl/⌘+b = 加粗
+            </DropdownItem>
+            <DropdownItem>
+              ctrl/⌘+k = 空链接
+            </DropdownItem>
+            <DropdownItem>
+              ctrl/⌘+u = 上传图片
+            </DropdownItem>
+            <DropdownItem>
+              ctrl/⌘+i = 行内代码
+            </DropdownItem>
+            <DropdownItem>
+              ctrl/⌘+shift+i = 代码块
+            </DropdownItem>
+            <DropdownItem name="github" style="color:red" divided>觉得好用，去点个star ？</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </i-col>
+      <i-col class="center" span="1">
+        <Button @click="makeFile" type="primary">导出</Button>
+      </i-col>
+
     </Row>
 
     <Modal v-model="modalShow" title="插入图片" @on-cancel="clear">
@@ -54,19 +82,23 @@ export default {
         {
           desc: '加粗',
           template: ' **text** ',
-          icon: 'icon-jiacu'
+          icon: 'icon-jiacu',
+          bothEnds: '**'
         }, {
           desc: '倾斜',
           template: ' *text* ',
-          icon: 'icon-qingxie'
+          icon: 'icon-qingxie',
+          bothEnds: '*'
         }, {
           desc: '删除线',
           template: ' ~~text~~ ',
-          icon: 'icon-shanchuxian'
+          icon: 'icon-shanchuxian',
+          bothEnds: '~~'
         }, {
           desc: '下划线',
           template: ' ++text++ ',
-          icon: 'icon-Underline'
+          icon: 'icon-Underline',
+          bothEnds: '++'
         }, {
           desc: '行内代码',
           template: ' `text` ',
@@ -84,7 +116,8 @@ export default {
         }, {
           desc: '标记',
           template: ` ==text== `,
-          icon: 'icon-biaozhu'
+          icon: 'icon-biaozhu',
+          bothEnds: '=='
         }, {
           desc: '一级标题',
           template: `
@@ -166,8 +199,12 @@ text1 | text2`,
       ]
     }
   },
-  methods: {
 
+  methods: {
+    goToGithub (name) {
+      if (!name) return
+      window.open("https://github.com/ch957869975/md-editor");
+    },
     uploadError (error) {
       this.$Notice.error({
         title: '上传出错'
@@ -234,8 +271,8 @@ text1 | text2`,
         return url + '.jpg';
       }
     },
-    insert (temp, isSpecial = false) {
-      if (!isSpecial) bus.$emit('insert', temp)
+    insert (temp, isSpecial = false, bothEnds = '') {
+      if (!isSpecial) bus.$emit('insert', temp, bothEnds)
       else this[temp]()
     },
     link () {

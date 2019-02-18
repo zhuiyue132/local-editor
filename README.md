@@ -12,7 +12,7 @@
 
 ## 技术
 
-`vue` `less` `iview` `markdown-it` `iconfont`
+`vue` `less` `iview` `markdown-it` `iconfont` `hotkeys-js`
 
 ---
 
@@ -33,7 +33,7 @@
 
 - [ ] text
 - [x] text  
-      ^[脚注 1] ^[脚注 2]
+       ^[脚注 1] ^[脚注 2]
 
 掘金没有支持`标记`与`emoji`，贴一下图。
 ![](https://ws1.sinaimg.cn/mw690/0072Lfvtly1g08743vn20j302a03i0sl.jpg)
