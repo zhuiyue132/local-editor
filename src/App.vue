@@ -23,6 +23,7 @@ import markdownItEmoji from 'markdown-it-emoji';
 import './assets/theme.css'
 import 'highlight.js/styles/default.css'
 import hotkeys from 'hotkeys-js';
+import _ from 'lodash'
 
 export default {
   name: 'App',
@@ -32,6 +33,8 @@ export default {
   data () {
     return {
       editorContent: '',
+      operateHistory: [],
+      deleteHistory: [],
       result: '',
       markdown: new markdown({
         highlight: function (str, lang) {
@@ -48,9 +51,10 @@ export default {
   mounted () {
     console.log('不是所有的事情都能如愿以偿，但是任何事情都值得去尝试。加油！')
     hotkeys.filter = () => true
-    hotkeys('ctrl+2,command+2,ctrl+3,command+3,ctrl+b,command+b,ctrl+k,command+k,ctrl+u,command+u,ctrl+i,command+i,ctrl+shift+i,command+shift+i', (event, handler) => {
+    hotkeys('ctrl+2,command+2,ctrl+3,command+3,ctrl+b,command+b,ctrl+k,command+k,ctrl+u,command+u,ctrl+i,command+i,ctrl+shift+i,command+shift+i,ctrl+z,command+z,ctrl+shift+z,command+shift+z', (event, handler) => {
       event.preventDefault()
       let template = ''
+      let bothEnds = ''
       switch (handler.key) {
         case 'ctrl+2': // 二级标题
         case 'command+2':
@@ -65,6 +69,7 @@ export default {
         case 'ctrl+b': // 加粗
         case 'command+b':
           template = ' **text** '
+          bothEnds = '**'
           break;
         case 'ctrl+k': // 连接
         case 'command+k':
@@ -79,7 +84,7 @@ export default {
         case 'command+i':
           template = ' `text` '
           break;
-        case 'ctrl+shift+i': // 行内代码
+        case 'ctrl+shift+i': // 代码块
         case 'command+shift+i':
           template = `
 \`\`\`
@@ -87,12 +92,30 @@ code here!
 \`\`\`
 `
           break;
+        case 'ctrl+z': // 撤销
+        case 'command+z':
+
+          if (this.operateHistory.length < 1) return
+          this.deleteHistory.push(this.operateHistory[this.operateHistory.length - 1])
+          this.operateHistory.splice(this.operateHistory.length - 1, 1)
+          // if (this.operateHistory.length >= 1) { // 最后一步不允许撤销
+          //   this.editorContent = this.operateHistory[this.operateHistory.length - 1]
+          // }
+          var str = this.operateHistory.length ? this.operateHistory[this.operateHistory.length - 1] : ''
+          this.editorContent = str
+          break;
+        case 'ctrl+shift+z': // 撤销
+        case 'command+shift+z':
+          if (!this.deleteHistory.length) return
+          this.editorContent = this.deleteHistory[this.deleteHistory.length - 1]
+          this.deleteHistory.splice(this.deleteHistory.length - 1, 1)
+          break;
         default:
           template = ''
           break;
       }
       if (!template) return
-      this.insertAtCursor(template)
+      this.insertAtCursor(template, bothEnds)
     });
 
     /** 
@@ -124,13 +147,19 @@ code here!
     })
 
     if (!window.localStorage.getItem('MarkdownDraft')) return
-    this.editorContent = window.localStorage.getItem('MarkdownDraft')
+    this.editorContent = window.localStorage.getItem('MarkdownDraft') || ''
+    this.operateHistory.push(this.editorContent)
   },
   watch: {
-    editorContent () {
+    editorContent: _.debounce(function (current, prev) {
       this.result = this.markdown.render(this.editorContent)
+      const history = this.operateHistory
+      let str = history.length ? history[history.length - 1] : ''
+      if (current !== str) {
+        history.push(current)
+      }
       this.autoSave()
-    }
+    }, 0)
   },
   methods: {
     autoSave () { // 自动保存

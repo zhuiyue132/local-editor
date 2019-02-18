@@ -39,6 +39,12 @@
             <DropdownItem>
               ctrl/⌘+shift+i = 代码块
             </DropdownItem>
+            <DropdownItem divided>
+              ctrl/⌘+z = 撤销
+            </DropdownItem>
+            <DropdownItem>
+              ctrl/⌘+shift+z = 恢复
+            </DropdownItem>
             <DropdownItem name="github" style="color:red" divided>觉得好用，去点个star ？</DropdownItem>
           </DropdownMenu>
         </Dropdown>
