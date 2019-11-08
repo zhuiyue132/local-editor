@@ -121,9 +121,7 @@ code here!
     /** 
      * 操作按钮插入内容
     */
-    bus.$on('insert', (string, bothEnds) => {
-      this.insertAtCursor(string, bothEnds)
-    })
+    bus.$on('insert', this.insertAtCursor)
     /** 
      * 导出文件
     */
@@ -190,12 +188,10 @@ code here!
         if (restoreTop > 0) {
           myField.scrollTop = restoreTop;
         }
-        // myField.focus();
         myField.selectionStart = startPos + myValue.length;
         myField.selectionEnd = startPos + myValue.length;
       } else {
         myField.value += myValue;
-        // myField.focus();
       }
 
       document.querySelector('textarea').dispatchEvent(new Event('input'));
@@ -243,7 +239,7 @@ textarea.ivu-input {
     overflow: auto;
     font-size: 18px;
     &::before {
-      content: '编码区';
+      content: "编码区";
       font-size: 20px;
       font-weight: 800;
     }
@@ -258,7 +254,11 @@ textarea.ivu-input {
     font-size: 15px;
     font-weight: 400;
     &::before {
-      content: '预览区';
+      content: "预览区";
+    }
+    img[alt="img_preview"] {
+      max-width: 100%;
+      max-height: 600px;
     }
   }
 }
