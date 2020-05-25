@@ -23,6 +23,7 @@
     "@vue/eslint-config-airbnb": "^5.0.2",
     "axios": "^0.19.2",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-component": "^1.1.1",
     "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
