@@ -6,6 +6,24 @@
 > 后台管理模板 repo，包含了代码风格统一的配置，为了减少重复多次配置，独立出来每次使用时单独拉取再修改 `origin` 即可。
 > 暂时没有页面展示，只包含了配置和项目开发时常用目录。页面的发开留待后期。
 
+## 你什么时候需要这个仓库的帮助
+
+当你的技术栈是 `vue`，需要和其他人一起开发同一个项目需要做风格统一的这件事情时。前端的开发工具统一限制为 `vscode`。
+
+## 你应该怎么做
+
+```sh
+git clone http://172.16.6.101:3000/YUNDU/vue-admin-template.git
+
+git remote remove origin
+
+# 添加你自己的仓库地址到remote
+git remote add origin xxxx
+
+git push -u master
+
+```
+
 ## Install
 
 包管理工具，必须使用`npm`.
