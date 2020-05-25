@@ -22,7 +22,7 @@ npm run serve
 
 ## TODO
 
-- [ ] 第三方包单独拆解，如 `element-ui`, `axios`
+- [x] 第三方包单独拆解，如 `element-ui`, `axios`
 - [ ] `element-ui` 按需引入
 - [ ] 有一个成型的页面
 
