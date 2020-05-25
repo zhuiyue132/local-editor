@@ -11,7 +11,7 @@ module.exports = {
   publicPath: './',
   productionSourceMap: false,
   assetsDir: 'static',
-  configureWebpack: (config) => {
+  configureWebpack: config => {
     if (isProduction) {
       config.optimization = {
         runtimeChunk: 'single',
@@ -35,8 +35,8 @@ module.exports = {
       }
     }
   },
-  chainWebpack: (config) => {
-    config.plugin('html').tap((args) => {
+  chainWebpack: config => {
+    config.plugin('html').tap(args => {
       const arg = args
       arg[0].title = 'vue-admin-template-buildin'
       return args

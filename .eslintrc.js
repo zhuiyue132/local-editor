@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-05-25 09:59:47
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-05-25 10:30:07
+ * @Last Modified time: 2020-05-25 17:12:44
  * @Desc: eslint rules config
  */
 /**
