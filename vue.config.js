@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-05-25 10:03:09
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-03 15:27:04
+ * @Last Modified time: 2020-06-03 15:35:54
  * @Desc: vue-cli@3.x config
  */
 const isProduction = process.env.NODE_ENV === 'production'
@@ -38,7 +38,7 @@ module.exports = {
   chainWebpack: config => {
     config.plugin('html').tap(args => {
       const arg = args
-      arg[0].title = 'vue-admin-template-buildin'
+      arg[0].title = 'Editor'
       return args
     })
   }
