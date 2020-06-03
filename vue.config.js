@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-05-25 10:03:09
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-05-25 10:10:46
+ * @Last Modified time: 2020-06-03 15:27:04
  * @Desc: vue-cli@3.x config
  */
 const isProduction = process.env.NODE_ENV === 'production'
