@@ -2,7 +2,11 @@
   <div class="home">
     <el-container>
       <el-header class="nopadding">111</el-header>
-      <el-main class="nopadding">Main</el-main>
+      <el-main class="nopadding">
+        Main
+
+        <svg-icon icon-class="code" />
+      </el-main>
     </el-container>
   </div>
 </template>

@@ -7,6 +7,8 @@ import store from './store'
 import './components.js'
 import '@/styles/index.scss'
 
+import './icons' // icon
+
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 
