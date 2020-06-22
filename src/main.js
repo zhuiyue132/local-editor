@@ -6,13 +6,14 @@ import router from './router'
 import store from './store'
 import './components.js'
 import '@/styles/index.scss'
-
+import '@/styles/theme.css'
 import './icons' // icon
 
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 
 Vue.config.productionTip = false
+
 new Vue({
   router,
   store,
