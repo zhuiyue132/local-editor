@@ -27,6 +27,7 @@
   // import之后是否换行
   "stylusSupremacy.insertNewLineAroundImports": false,
   // 两个选择器中是否换行
-  "stylusSupremacy.insertNewLineAroundBlocks": false
+  "stylusSupremacy.insertNewLineAroundBlocks": false,
+  "liveServer.settings.port": 5501
   /* stylus 配置 end */
 }
