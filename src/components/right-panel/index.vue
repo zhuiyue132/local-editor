@@ -5,6 +5,9 @@
       <div class="handle-button" :style="{ top: buttonTop + 'px' }" @click="show = !show">
         <i :class="show ? 'el-icon-close' : 'el-icon-setting'" />
       </div>
+      <div class="handle-button" :style="{ top: '200px' }">
+        <svg-icon icon-class="preview"></svg-icon>
+      </div>
       <div class="rightPanel-items">
         <slot />
       </div>

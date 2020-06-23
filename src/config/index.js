@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:23:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-18 18:46:31
+ * @Last Modified time: 2020-06-23 10:16:04
  * @Desc: config
  */
 export default [
@@ -129,5 +129,9 @@ export default [
   {
     icon: 'undo',
     iconName: '恢复'
+  },
+  {
+    icon: 'hotkey',
+    iconName: '快捷键'
   }
 ]

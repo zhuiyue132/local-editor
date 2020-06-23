@@ -45,15 +45,22 @@ import { on } from '@/util'
 import Markdown from 'markdown-it'
 
 const mkd = new Markdown({
-  highlight(str, lang) {
+  html: true,
+  highlight: (str, lang) => {
+    // 加上custom则表示自定义样式，而非微信专属，避免被remove pre
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return hljs.highlight(lang, str).value
-      } catch (__) {
-        throw Error('代码高亮报错')
+        const formatted = hljs
+          .highlight(lang, str, true)
+          .value.replace(/\n/g, '<br/>') // 换行用br表示
+          .replace(/\s/g, '&nbsp;') // 用nbsp替换空格
+          .replace(/span&nbsp;/g, 'span ') // span标签修复
+        return `<pre class="custom"><code class="hljs">${formatted}</code></pre>`
+      } catch (e) {
+        throw Error(e)
       }
     }
-    return '' // 使用额外的默认转义
+    return `<pre class="custom"><code class="hljs">${str}</code></pre>`
   }
 })
   .use(require('markdown-it-footnote'))

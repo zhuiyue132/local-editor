@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-05-25 16:56:54
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-18 17:20:45
+ * @Last Modified time: 2020-06-23 10:47:51
  * @Desc: register components
  */
 import Vue from 'vue'
@@ -17,7 +17,9 @@ import {
   Tooltip,
   Dropdown,
   DropdownItem,
-  DropdownMenu
+  DropdownMenu,
+  Switch,
+  Popover
 } from 'element-ui'
 
 Vue.use(Button)
@@ -31,3 +33,5 @@ Vue.use(Tooltip)
 Vue.use(Dropdown)
 Vue.use(DropdownItem)
 Vue.use(DropdownMenu)
+Vue.use(Switch)
+Vue.use(Popover)

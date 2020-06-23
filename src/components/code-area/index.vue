@@ -1,5 +1,11 @@
 <template>
-  <div class="md-code-area" ref="ace"></div>
+  <div>
+    <div class="md-code-area" ref="ace"></div>
+    <el-popover placement="top-start" width="300" class="hotkey-icon" trigger="hover">
+      <div>这里是快捷键提示</div>
+      <svg-icon slot="reference" icon-class="hotkey" class-name="hotkey-icon" />
+    </el-popover>
+  </div>
 </template>
 <script>
 import Ace from 'ace-builds'
@@ -47,7 +53,18 @@ export default {
 </script>
 <style lang="scss" scoped>
 .md-code-area {
-  height: calc(100vh - 64px);
+  height: calc(100vh - 54px);
   overflow: scroll;
+}
+.hotkey-icon {
+  position: fixed;
+  font-size: 20px;
+  bottom: 10px;
+  left: 50%;
+  z-index: 9999;
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  margin: 0 8px;
 }
 </style>
