@@ -19,9 +19,9 @@
           免费图床。
         </div>
       </div>
-      <div class="drawer-item">
+      <!-- <div class="drawer-item">
         <span>主题设置</span>
-      </div>
+      </div> -->
       <div class="drawer-item">
         <span>显示行号</span>
         <el-switch v-model="gutterActivated" class="drawer-switch" />
@@ -30,22 +30,51 @@
         <span>光标行高亮</span>
         <el-switch v-model="cursorLineHighlightActivated" class="drawer-switch" />
       </div>
+      <el-form>
+        <el-form-item label="主题设置">
+          <el-select v-model="currentTheme" class="drawer-input">
+            <el-option-group v-for="theme in themes" :key="theme.label" :label="theme.label">
+              <el-option v-for="item in theme.list" :key="item.value" :label="item.label" :value="item.value" />
+            </el-option-group>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="字号设置"> </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import themes from '@/config/theme.config'
+
 export default {
   name: 'Settings',
   data() {
     return {
+      themes,
       autoScrollActivated: false,
       pictureBedActivated: true,
       gutterActivated: true,
-      cursorLineHighlightActivated: true
+      cursorLineHighlightActivated: true,
+      currentTheme: ''
     }
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      theme: state => state.settings.theme
+    })
+  },
+  watch: {
+    currentTheme(curr, prev) {
+      if (curr && prev) {
+        this.$store.dispatch('themeChange', curr)
+      }
+    }
+  },
+  created() {
+    this.currentTheme = this.theme
+  },
   methods: {}
 }
 </script>
@@ -73,7 +102,7 @@ export default {
     float: right;
   }
   .drawer-input {
-    width: 100px;
+    width: 200px;
     float: right;
   }
 }

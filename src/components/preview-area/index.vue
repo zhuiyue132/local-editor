@@ -16,7 +16,6 @@ export default {
 .md-preview-area {
   height: calc(100vh - 64px);
   overflow: scroll;
-  padding: 10px;
-  box-sizing: border-box;
+  padding: 30px 55px;
 }
 </style>

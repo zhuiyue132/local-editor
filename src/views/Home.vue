@@ -19,7 +19,7 @@
       </el-header>
 
       <el-main class="md-main">
-        <code-area v-model="codeStr" class="area-item" />
+        <code-area v-model="codeStr" ref="code" class="area-item" />
         <el-divider class="area-split-line" direction="vertical" />
         <preview-area :value="parsedHtml" class="area-item" />
       </el-main>
@@ -166,10 +166,9 @@ export default {
   .md-main {
     padding: 0;
     padding-top: 54px;
-    box-sizing: border-box;
     display: flex;
     .area-item {
-      flex: 1;
+      width: calc(50vw - 1px);
       min-height: calc(100vh - 54px);
     }
     .area-split-line {

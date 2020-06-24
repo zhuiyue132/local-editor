@@ -103,7 +103,7 @@ export default {
 
 .rightPanel {
   width: 100%;
-  max-width: 260px;
+  max-width: 320px;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -112,14 +112,14 @@ export default {
   transition: all 0.25s cubic-bezier(0.7, 0.3, 0.1, 1);
   transform: translate(100%);
   background: #fff;
-  z-index: 40000;
+  z-index: 2000;
 }
 
 .show {
   transition: all 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
 
   .rightPanel-background {
-    z-index: 20000;
+    z-index: 1999;
     opacity: 1;
     width: 100%;
     height: 100%;

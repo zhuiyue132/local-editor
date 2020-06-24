@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:51:51
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-24 10:40:52
+ * @Last Modified time: 2020-06-24 16:21:27
  * @Desc: 工具函数
  */
 
@@ -47,6 +47,7 @@ export const off = (function () {
  */
 const CODE_KEY = 'code_value'
 export const FIRST_ENTRY_KEY = 'first_entry'
+const THEME_KEY = 'theme'
 
 export function setCode(str) {
   window.localStorage.setItem(CODE_KEY, str)
@@ -62,4 +63,12 @@ export function removeCode() {
 
 export function isFirstEntry() {
   return window.localStorage.getItem(FIRST_ENTRY_KEY) === null
+}
+
+export function setTheme(str) {
+  window.localStorage.setItem(THEME_KEY, str)
+}
+
+export function getTheme() {
+  return window.localStorage.getItem(THEME_KEY)
 }

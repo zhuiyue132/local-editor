@@ -2,13 +2,15 @@
  * @Author: chenghao
  * @Date: 2020-05-25 16:56:54
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-23 10:47:51
+ * @Last Modified time: 2020-06-24 16:08:33
  * @Desc: register components
  */
 import Vue from 'vue'
 import {
   Button,
   Select,
+  Option,
+  OptionGroup,
   Header,
   Container,
   Main,
@@ -19,7 +21,9 @@ import {
   DropdownItem,
   DropdownMenu,
   Switch,
-  Popover
+  Popover,
+  Form,
+  FormItem
 } from 'element-ui'
 
 Vue.use(Button)
@@ -35,3 +39,7 @@ Vue.use(DropdownItem)
 Vue.use(DropdownMenu)
 Vue.use(Switch)
 Vue.use(Popover)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Option)
+Vue.use(OptionGroup)

@@ -11,7 +11,7 @@
 import debounce from 'lodash/debounce'
 import Ace from 'ace-builds'
 import 'ace-builds/webpack-resolver' // 在 webpack 环境中使用必须要导入
-
+import { mapState } from 'vuex'
 // const DEFAULT_TEMPLATE = 'text'
 
 export default {
@@ -31,6 +31,16 @@ export default {
       ace: null
     }
   },
+  computed: {
+    ...mapState({
+      theme: state => state.settings.theme
+    })
+  },
+  watch: {
+    theme(val) {
+      this.ace.setTheme(val)
+    }
+  },
   mounted() {
     console.log('Ace :>> ', Ace)
     this.ace = Ace.edit(this.$refs.ace, {
@@ -42,15 +52,15 @@ export default {
       wrap: true,
       value: this.value ? this.value : ''
     })
-    this.ace.setTheme('ace/theme/chrome')
+
+    this.ace.setTheme(this.theme)
 
     this.ace.getSession().setMode('ace/mode/markdown')
     this.ace.renderer.setShowPrintMargin(false)
 
     const handleChangeEvent = debounce(this.handleOnChange, 300)
     this.ace.getSession().on('change', handleChangeEvent)
-    this.ace.getSession().selection.on('changeSelection', e => {
-      console.log(e)
+    this.ace.getSession().selection.on('changeSelection', () => {
       console.log('text :>> ', this.ace.session.getTextRange(this.ace.getSelectionRange()))
     })
     // this.ace.renderer.setShowGutter(true) // 行号
@@ -80,7 +90,7 @@ export default {
   position: fixed;
   font-size: 20px;
   bottom: 10px;
-  left: 50%;
+  left: 51%;
   z-index: 9999;
   cursor: pointer;
   height: 20px;
