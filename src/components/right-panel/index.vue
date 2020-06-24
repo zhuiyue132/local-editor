@@ -6,7 +6,13 @@
         <i :class="show ? 'el-icon-close' : 'el-icon-setting'" />
       </div>
       <div class="handle-button" :style="{ top: '200px' }">
-        <svg-icon icon-class="preview"></svg-icon>
+        <svg-icon icon-class="preview" />
+      </div>
+      <div class="handle-button" :style="{ top: '300px' }">
+        <svg-icon icon-class="markdown" />
+      </div>
+      <div class="handle-button" :style="{ top: '350px' }">
+        <svg-icon icon-class="pdf" />
       </div>
       <div class="rightPanel-items">
         <slot />
@@ -54,6 +60,9 @@ export default {
     elx.remove()
   },
   methods: {
+    handleButtonClick(type) {
+      console.log(type)
+    },
     addEventClick() {
       window.addEventListener('click', this.closeSidebar)
     },

@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:51:51
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-18 17:53:15
+ * @Last Modified time: 2020-06-24 10:40:52
  * @Desc: 工具函数
  */
 
@@ -41,3 +41,25 @@ export const off = (function () {
     }
   }
 })()
+
+/**
+ * 存储和清除code区域的值
+ */
+const CODE_KEY = 'code_value'
+export const FIRST_ENTRY_KEY = 'first_entry'
+
+export function setCode(str) {
+  window.localStorage.setItem(CODE_KEY, str)
+}
+
+export function getCode() {
+  return window.localStorage.getItem(CODE_KEY)
+}
+
+export function removeCode() {
+  window.localStorage.removeItem(CODE_KEY)
+}
+
+export function isFirstEntry() {
+  return window.localStorage.getItem(FIRST_ENTRY_KEY) === null
+}

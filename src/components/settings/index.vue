@@ -9,7 +9,7 @@
       </div>
       <div class="drawer-item">
         <span>启用图床</span>
-        <el-switch v-model="pictureBedActivated" class="drawer-switch" />
+        <el-switch disabled="" v-model="pictureBedActivated" class="drawer-switch" />
         <div class="drawer-tip">
           图床启用后，可以将【 jpeg, jpg, png, gif, bmp 】直接拖拽至编辑器中上传，图片将上传至
         </div>
@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       autoScrollActivated: false,
-      pictureBedActivated: false,
+      pictureBedActivated: true,
       gutterActivated: true,
       cursorLineHighlightActivated: true
     }

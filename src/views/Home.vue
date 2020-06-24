@@ -41,13 +41,13 @@ import PreviewArea from '@/components/preview-area'
 import RightPanel from '@/components/right-panel'
 import Settings from '@/components/settings'
 import icons from '@/config'
-import { on } from '@/util'
+import { on, setCode, getCode, isFirstEntry, FIRST_ENTRY_KEY } from '@/util'
 import Markdown from 'markdown-it'
+import templateCode from '@/config/template'
 
 const mkd = new Markdown({
   html: true,
   highlight: (str, lang) => {
-    // 加上custom则表示自定义样式，而非微信专属，避免被remove pre
     if (lang && hljs.getLanguage(lang)) {
       try {
         const formatted = hljs
@@ -84,15 +84,15 @@ export default {
       icons: [],
       iconreset: [],
       showDropdownBtn: false,
-      codeStr: '# 1',
+      codeStr: '',
       parsedHtml: null
     }
   },
   watch: {
     codeStr: {
-      immediate: true,
       handler(value) {
         this.parsedHtml = mkd.render(value)
+        setCode(value)
       }
     }
   },
@@ -100,6 +100,16 @@ export default {
     const resize = debounce(this.handleResize, 10)
     this.handleResize()
     on(window, 'resize', resize)
+
+    if (isFirstEntry()) {
+      this.codeStr = templateCode
+    } else if (getCode()) {
+      this.codeStr = getCode()
+    } else {
+      this.codeStr = ''
+    }
+
+    window.localStorage.setItem(FIRST_ENTRY_KEY, 1)
   },
 
   methods: {
@@ -115,6 +125,7 @@ export default {
         this.iconreset = [...icons].splice(iconNum)
       }
     },
+
     parseCodeStr() {
       return mkd.render(this.codeStr)
     }

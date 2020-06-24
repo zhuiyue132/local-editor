@@ -12,6 +12,8 @@ import debounce from 'lodash/debounce'
 import Ace from 'ace-builds'
 import 'ace-builds/webpack-resolver' // 在 webpack 环境中使用必须要导入
 
+// const DEFAULT_TEMPLATE = 'text'
+
 export default {
   name: 'CodeArea',
   props: {
@@ -47,10 +49,24 @@ export default {
 
     const handleChangeEvent = debounce(this.handleOnChange, 300)
     this.ace.getSession().on('change', handleChangeEvent)
+    this.ace.getSession().selection.on('changeSelection', e => {
+      console.log(e)
+      console.log('text :>> ', this.ace.session.getTextRange(this.ace.getSelectionRange()))
+    })
+    // this.ace.renderer.setShowGutter(true) // 行号
+    // this.ace.setOption('displayIndentGuides', true) // 缩进指示线
   },
   methods: {
     handleOnChange() {
-      this.$emit('change', this.ace.getSession().getValue())
+      this.$emit('change', this.getValue())
+    },
+    handleInsert() {},
+    getSelectionRange() {
+      if (!this.ace) return ''
+      return this.ace.session.getTextRange(this.ace.getSelectionRange())
+    },
+    getValue() {
+      return this.ace.getSession().getValue()
     }
   }
 }
