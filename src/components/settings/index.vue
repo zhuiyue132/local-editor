@@ -85,7 +85,7 @@ export default {
   font-size: 14px;
   line-height: 1.5;
   word-wrap: break-word;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   .drawer-item {
     color: rgba(0, 0, 0, 0.65);

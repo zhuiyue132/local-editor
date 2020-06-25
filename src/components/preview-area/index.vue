@@ -23,7 +23,7 @@ export default {
 <style lang="scss" scoped>
 .md-preview-area {
   height: calc(100vh - 64px);
-  overflow: scroll;
-  padding: 30px 55px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>
