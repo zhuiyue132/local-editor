@@ -12,7 +12,6 @@ import debounce from 'lodash/debounce'
 import Ace from 'ace-builds'
 import 'ace-builds/webpack-resolver' // 在 webpack 环境中使用必须要导入
 import { mapState } from 'vuex'
-// const DEFAULT_TEMPLATE = 'text'
 
 export default {
   name: 'CodeArea',
@@ -65,13 +64,16 @@ export default {
     })
     // this.ace.renderer.setShowGutter(true) // 行号
     // this.ace.setOption('displayIndentGuides', true) // 缩进指示线
+
+    // 保存编辑器实例
+    this.$store.commit('SET_EDITOR', this.ace)
   },
   methods: {
     handleOnChange() {
       this.$emit('change', this.getValue())
     },
     handleInsert() {},
-    getSelectionRange() {
+    getTextRange() {
       if (!this.ace) return ''
       return this.ace.session.getTextRange(this.ace.getSelectionRange())
     },

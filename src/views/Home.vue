@@ -3,7 +3,7 @@
     <el-container>
       <el-header class="md-header">
         <el-tooltip v-for="icon in icons" :key="icon.iconName" :content="icon.iconName">
-          <svg-icon class-name="header-icon" :icon-class="icon.icon"></svg-icon>
+          <svg-icon class-name="header-icon" :icon-class="icon.icon" @click="handleHeaderIconClick(icon)"></svg-icon>
         </el-tooltip>
 
         <el-dropdown v-if="showDropdownBtn" class="" style="cursor: pointer;">
@@ -113,6 +113,28 @@ export default {
   },
 
   methods: {
+    // eslint-disable-next-line consistent-return
+    handleHeaderIconClick({ template, callback, isSymmetrical, defaultTemplate }) {
+      if (callback) return callback()
+      // 当前光标包裹了内容，需要将选中的内容，用对称标签 重新包裹
+      let ret = null
+      if (isSymmetrical) {
+        ret = defaultTemplate
+        if (this.$refs.code.getTextRange()) {
+          console.log('插入对称语法 :>> ', ` ${template}${this.$refs.code.getTextRange()}${template} `)
+          ret = ` ${template}${this.$refs.code.getTextRange()}${template} `
+        }
+      } else {
+        ret = template
+        if (this.$refs.code.getTextRange()) {
+          // 如果当前选中了内容，则把选中的也带入带编辑器中，否则新插入的内容会替换掉选中内容
+          console.log('插入非对称语法 :>> ', ` ${template}${this.$refs.code.getTextRange()} `)
+          ret = `${this.$refs.code.getTextRange()}${template} `
+        }
+      }
+
+      this.$refs.code.ace.insert(ret)
+    },
     handleResize() {
       const { innerWidth } = window
       if (innerWidth > icons.length * this.SINGLE_ICON_WIDTH + this.PADDING) {
