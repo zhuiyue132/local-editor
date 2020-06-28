@@ -18,19 +18,28 @@
           <b> <a href="http://sm.ms" target="_blank" rel="noopener noreferrer">SM.MS</a> </b>
           免费图床。
         </div>
+        <div class="drawer-tip">
+          Token: <b>{{ token }}</b>
+        </div>
       </div>
-      <!-- <div class="drawer-item">
-        <span>主题设置</span>
-      </div> -->
+
       <div class="drawer-item">
         <span>显示行号</span>
         <el-switch v-model="gutterActivated" class="drawer-switch" />
       </div>
-      <div class="drawer-item">
+      <!-- <div class="drawer-item">
         <span>光标行高亮</span>
         <el-switch v-model="cursorLineHighlightActivated" class="drawer-switch" />
-      </div>
+      </div> -->
       <el-form>
+        <el-form-item label="字号设置">
+          <el-radio-group v-model="currentFontSize" size="small" class="drawer-switch">
+            <el-radio-button v-for="(item, index) in fontSizes" :key="index" :label="item">
+              {{ item }}px
+            </el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+
         <el-form-item label="主题设置">
           <el-select v-model="currentTheme" class="drawer-input">
             <el-option-group v-for="theme in themes" :key="theme.label" :label="theme.label">
@@ -38,7 +47,6 @@
             </el-option-group>
           </el-select>
         </el-form-item>
-        <el-form-item label="字号设置"> </el-form-item>
       </el-form>
     </div>
   </div>
@@ -47,22 +55,29 @@
 <script>
 import { mapState } from 'vuex'
 import themes from '@/config/theme.config'
+import fontSizes from '@/config/fontsize.config'
+import token from '@/config/sm.ms.config'
 
 export default {
   name: 'Settings',
   data() {
     return {
+      token,
       themes,
+      fontSizes,
       autoScrollActivated: false,
       pictureBedActivated: true,
       gutterActivated: true,
-      cursorLineHighlightActivated: true,
-      currentTheme: ''
+      // cursorLineHighlightActivated: true,
+      currentTheme: '',
+      currentFontSize: ''
     }
   },
   computed: {
     ...mapState({
-      theme: state => state.settings.theme
+      theme: state => state.settings.theme,
+      fontSize: state => state.settings.fontSize,
+      showGutter: state => state.settings.showGutter
     })
   },
   watch: {
@@ -70,12 +85,21 @@ export default {
       if (curr && prev) {
         this.$store.dispatch('themeChange', curr)
       }
+    },
+    currentFontSize(curr, prev) {
+      if (curr && prev) {
+        this.$store.dispatch('fontSizeChange', curr)
+      }
+    },
+    gutterActivated(curr, prev) {
+      this.$store.dispatch('toggleGutter', curr)
     }
   },
   created() {
     this.currentTheme = this.theme
-  },
-  methods: {}
+    this.currentFontSize = this.fontSize
+    this.gutterActivated = this.showGutter
+  }
 }
 </script>
 

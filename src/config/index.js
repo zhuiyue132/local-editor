@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:23:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-25 18:27:09
+ * @Last Modified time: 2020-06-28 14:57:01
  * @Desc: config
  */
 import store from '@/store'
@@ -179,6 +179,7 @@ show your code here！
   {
     icon: 'table',
     template: `
+
 header 1 | header 2
 ---|---
 text1 | text2

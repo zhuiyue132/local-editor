@@ -32,12 +32,20 @@ export default {
   },
   computed: {
     ...mapState({
-      theme: state => state.settings.theme
+      theme: state => state.settings.theme,
+      fontSize: state => +state.settings.fontSize,
+      showGutter: state => state.settings.showGutter
     })
   },
   watch: {
     theme(val) {
       this.ace.setTheme(val)
+    },
+    fontSize(val) {
+      this.ace.setFontSize(val)
+    },
+    showGutter(val) {
+      this.ace.renderer.setShowGutter(val)
     }
   },
   mounted() {
@@ -45,10 +53,12 @@ export default {
     this.ace = Ace.edit(this.$refs.ace, {
       autoScrollEditorIntoView: true,
       copyWithEmptySelection: true,
-      fontSize: 16, // 编辑器内字体大小
       tabSize: 2,
       selectionStyle: 'text',
       wrap: true,
+      useSoftTabs: true,
+      fontSize: this.fontSize, // 编辑器内字体大小
+      showGutter: this.showGutter,
       value: this.value ? this.value : ''
     })
 
@@ -59,11 +69,10 @@ export default {
 
     const handleChangeEvent = debounce(this.handleOnChange, 300)
     this.ace.getSession().on('change', handleChangeEvent)
+
     this.ace.getSession().selection.on('changeSelection', () => {
-      console.log('text :>> ', this.ace.session.getTextRange(this.ace.getSelectionRange()))
+      console.log('text selected was changed :>> ', this.ace.session.getTextRange(this.ace.getSelectionRange()))
     })
-    // this.ace.renderer.setShowGutter(true) // 行号
-    // this.ace.setOption('displayIndentGuides', true) // 缩进指示线
 
     // 保存编辑器实例
     this.$store.commit('SET_EDITOR', this.ace)
