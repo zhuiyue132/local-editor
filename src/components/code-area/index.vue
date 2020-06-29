@@ -87,6 +87,7 @@ export default {
       return this.ace.session.getTextRange(this.ace.getSelectionRange())
     },
     getValue() {
+      if (!this.ace) return ''
       return this.ace.getSession().getValue()
     }
   }

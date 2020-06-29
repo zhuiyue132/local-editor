@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:23:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-28 14:57:01
+ * @Last Modified time: 2020-06-29 20:46:31
  * @Desc: config
  */
 import store from '@/store'
@@ -15,7 +15,8 @@ import store from '@/store'
  * callback： 点击回调
  * template: 模板
  * isSymmetrical: 模板语法是否对称
- * defaultTemplate: 默认模板
+ * defaultTemplate: 默认模板,
+ * extraComponentName: 需要额外组件辅助完成功能时，填写辅助组件名，动态组件渲染。
  */
 export default [
   // TODO: 前进后退时对是否可执行的判断
@@ -112,6 +113,21 @@ show your code here！
 \`\`\``
   },
   {
+    icon: 'table',
+    iconName: '插入表格',
+    extraComponentName: 'table-size-selector'
+  },
+  {
+    icon: 'link',
+    iconName: '插入链接',
+    extraComponentName: 'link-assitor'
+  },
+  {
+    icon: 'image',
+    iconName: '直接把图片拖动到页面内完成上传',
+    callback() {}
+  },
+  {
     icon: 'h2',
     iconName: '二级标题',
     template: `
@@ -174,17 +190,6 @@ show your code here！
     template: `
 1. text - 1
 1. text - 2`
-  },
-
-  {
-    icon: 'table',
-    template: `
-
-header 1 | header 2
----|---
-text1 | text2
-text1 | text2`,
-    iconName: '插入表格'
   }
 
   // {

@@ -91,7 +91,7 @@ export default {
         this.$store.dispatch('fontSizeChange', curr)
       }
     },
-    gutterActivated(curr, prev) {
+    gutterActivated(curr) {
       this.$store.dispatch('toggleGutter', curr)
     }
   },

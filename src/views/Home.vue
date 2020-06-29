@@ -2,16 +2,33 @@
   <div class="home">
     <el-container>
       <el-header class="md-header">
-        <el-tooltip v-for="icon in icons" :key="icon.iconName" :content="icon.iconName">
-          <svg-icon class-name="header-icon" :icon-class="icon.icon" @click="handleHeaderIconClick(icon)"></svg-icon>
-        </el-tooltip>
+        <template v-for="(icon, index) in icons">
+          <el-tooltip v-if="!icon.extraComponentName" :key="icon.iconName" :content="icon.iconName">
+            <svg-icon
+              :style="{ marginLeft: index === 0 ? '0' : '8px', marginRight: index === icons.length - 1 ? '0' : '8px' }"
+              class-name="header-icon"
+              :icon-class="icon.icon"
+              @click="handleHeaderIconClick(icon)"
+            />
+          </el-tooltip>
 
-        <el-dropdown v-if="showDropdownBtn" class="" style="cursor: pointer;">
+          <el-popover v-else :key="icon.iconName" ref="pop" placement="top-start" width="230" trigger="hover">
+            <component :is="icon.extraComponentName" @assit="handleAssit" />
+            <svg-icon
+              class-name="header-icon"
+              :style="{ marginLeft: index === 0 ? '0' : '8px', marginRight: index === icons.length - 1 ? '0' : '8px' }"
+              slot="reference"
+              :icon-class="icon.icon"
+            />
+          </el-popover>
+        </template>
+
+        <el-dropdown v-if="showDropdownBtn" @command="handleHeaderIconClick" style="cursor: pointer;">
           <span class="el-dropdown-link">
-            <i class="el-icon-arrow-down header-icon" style="font-size: 20px; font-weight: bold;"></i>
+            <i class="el-icon-arrow-down header-icon" style="font-size: 20px; font-weight: bold;" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="icon in iconreset" :key="icon.iconName">
+            <el-dropdown-item v-for="icon in iconreset" :command="icon" :key="icon.iconName">
               <svg-icon class-name="header-icon" :icon-class="icon.icon" /> {{ icon.iconName }}
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -32,6 +49,8 @@
 </template>
 
 <script>
+/* eslint-disable no-case-declarations */
+
 import debounce from 'lodash/debounce'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/default.css'
@@ -40,6 +59,8 @@ import CodeArea from '@/components/code-area'
 import PreviewArea from '@/components/preview-area'
 import RightPanel from '@/components/right-panel'
 import Settings from '@/components/settings'
+import TableSizeSelector from '@/components/table-size-selector'
+import LinkAssitor from '@/components/link-assitor'
 import icons from '@/config'
 import { on, setCode, getCode, isFirstEntry, FIRST_ENTRY_KEY } from '@/util'
 import Markdown from 'markdown-it'
@@ -75,7 +96,9 @@ export default {
     CodeArea,
     PreviewArea,
     RightPanel,
-    Settings
+    Settings,
+    TableSizeSelector,
+    LinkAssitor
   },
   data() {
     return {
@@ -113,6 +136,40 @@ export default {
   },
 
   methods: {
+    handleAssit(data = {}) {
+      console.log('data :>> ', data)
+      this.$refs.pop[0].doClose()
+      const { type, col, row } = data
+      switch (type) {
+        case 'table':
+          let th = 'title1'
+          let tableSeparate = '---'
+          let rt = 'text1'
+          for (let index = 2; index <= col; index++) {
+            th += `|title${index}`
+            tableSeparate += '|---'
+            rt += `|text${index}`
+          }
+          const tempRt = rt
+          for (let index = 2; index <= row; index++) {
+            rt += `
+${tempRt}`
+          }
+          const ret = `
+${th}  
+${tableSeparate}
+${rt}
+
+`
+          console.log('ret :>> ', ret)
+          this.$refs.code.ace.insert(ret)
+          break
+
+        default:
+          break
+      }
+    },
+
     // eslint-disable-next-line consistent-return
     handleHeaderIconClick({ template, callback, isSymmetrical, defaultTemplate }) {
       if (callback) return callback()
@@ -177,12 +234,6 @@ export default {
       height: 20px;
       width: 20px;
       margin: 0 8px;
-      &:nth-child(1) {
-        margin-left: 0;
-      }
-      &:nth-last-child(1) {
-        margin-right: 0;
-      }
     }
   }
   .md-main {
