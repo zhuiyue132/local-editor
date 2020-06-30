@@ -4,7 +4,7 @@
     <el-input v-model="form.desc" size="mini" placeholder="输入显示文本" />
     <div class="link-label">输入链接</div>
     <el-input v-model="form.url" size="mini" placeholder="输入链接地址" />
-    <el-button size="mini" class="link-label" type="primary">完成</el-button>
+    <el-button size="mini" class="link-label" type="primary" @click="save">完成</el-button>
   </div>
 </template>
 <script>
@@ -16,6 +16,21 @@ export default {
         url: '',
         desc: ''
       }
+    }
+  },
+  methods: {
+    save() {
+      const { url, desc } = this.form
+      this.$emit('assit', {
+        url,
+        desc,
+        type: 'link'
+      })
+      this.reset()
+      this.$parent.doClose() // el-popover 组件内部方法
+    },
+    reset() {
+      this.form = { ...this.$options.data().form }
     }
   }
 }

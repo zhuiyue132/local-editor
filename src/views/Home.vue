@@ -139,7 +139,7 @@ export default {
     handleAssit(data = {}) {
       console.log('data :>> ', data)
       this.$refs.pop[0].doClose()
-      const { type, col, row } = data
+      const { type, col, row, url, desc } = data
       switch (type) {
         case 'table':
           let th = 'title1'
@@ -156,15 +156,18 @@ export default {
 ${tempRt}`
           }
           const ret = `
+
 ${th}  
 ${tableSeparate}
 ${rt}
 
 `
-          console.log('ret :>> ', ret)
+          console.log('table template :>> ', ret)
           this.$refs.code.ace.insert(ret)
           break
-
+        case 'link':
+          this.$refs.code.ace.insert(` [${desc}](${url}) `)
+          break
         default:
           break
       }
