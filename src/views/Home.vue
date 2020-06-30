@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" @dragenter.prevent="dragover = true">
     <el-container>
       <el-header class="md-header">
         <template v-for="(icon, index) in icons">
@@ -45,6 +45,21 @@
     <right-panel>
       <settings />
     </right-panel>
+
+    <el-upload
+      drag
+      :show-file-list="false"
+      :style="{ zIndex: dragover ? 2001 : -1 }"
+      action="https://imgkr.com/api/v2/files/upload"
+      with-credentials
+      name="file"
+      ref="upload"
+      class="full-screen-upload"
+      :on-success="handleUploadSuccess"
+      :on-error="handleUploadError"
+    >
+      11111</el-upload
+    >
   </div>
 </template>
 
@@ -108,7 +123,8 @@ export default {
       iconreset: [],
       showDropdownBtn: false,
       codeStr: '',
-      parsedHtml: null
+      parsedHtml: null,
+      dragover: false
     }
   },
   watch: {
@@ -134,8 +150,18 @@ export default {
 
     window.localStorage.setItem(FIRST_ENTRY_KEY, 1)
   },
-
+  mounted() {
+    console.log('this.$refs.upload :>> ', this.$refs.upload)
+  },
   methods: {
+    handleUploadSuccess(res) {
+      console.log('pic upload success :>> ', res)
+      this.dragover = false
+      this.$refs.code.ace.insert(` ![alt](${res.data})`)
+    },
+    handleUploadError() {
+      this.dragover = false
+    },
     handleAssit(data = {}) {
       console.log('data :>> ', data)
       this.$refs.pop[0].doClose()
@@ -251,5 +277,20 @@ ${rt}
       height: calc(100vh - 54px);
     }
   }
+  .full-screen-upload {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
+}
+</style>
+<style lang="scss">
+.el-upload-dragger {
+  width: 100vw;
+  height: 100vh;
+  z-index: inherit;
+  background-color: rgba(255, 255, 255, 0.75);
 }
 </style>

@@ -15,11 +15,8 @@
         </div>
         <div class="drawer-tip">
           当前使用的是
-          <b> <a href="http://sm.ms" target="_blank" rel="noopener noreferrer">SM.MS</a> </b>
+          <b> <a href="https://imgkr.com/" target="_blank" rel="noopener noreferrer">图壳</a> </b>
           免费图床。
-        </div>
-        <div class="drawer-tip">
-          Token: <b>{{ token }}</b>
         </div>
       </div>
 
@@ -56,13 +53,11 @@
 import { mapState } from 'vuex'
 import themes from '@/config/theme.config'
 import fontSizes from '@/config/fontsize.config'
-import token from '@/config/sm.ms.config'
 
 export default {
   name: 'Settings',
   data() {
     return {
-      token,
       themes,
       fontSizes,
       autoScrollActivated: false,

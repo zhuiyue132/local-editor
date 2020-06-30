@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-05-25 10:03:09
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-05 14:50:31
+ * @Last Modified time: 2020-06-30 18:00:51
  * @Desc: vue-cli@3.x config
  */
 const path = require('path')
