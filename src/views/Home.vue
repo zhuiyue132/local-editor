@@ -5,7 +5,10 @@
         <template v-for="(icon, index) in icons">
           <el-tooltip v-if="!icon.extraComponentName" :key="icon.iconName" :content="icon.iconName">
             <svg-icon
-              :style="{ marginLeft: index === 0 ? '0' : '8px', marginRight: index === icons.length - 1 ? '0' : '8px' }"
+              :style="{
+                marginLeft: index === 0 ? '0' : '8px',
+                marginRight: index === icons.length - 1 ? '0' : '8px'
+              }"
               class-name="header-icon"
               :icon-class="icon.icon"
               @click="handleHeaderIconClick(icon)"
@@ -16,7 +19,10 @@
             <component :is="icon.extraComponentName" @assit="handleAssit" />
             <svg-icon
               class-name="header-icon"
-              :style="{ marginLeft: index === 0 ? '0' : '8px', marginRight: index === icons.length - 1 ? '0' : '8px' }"
+              :style="{
+                marginLeft: index === 0 ? '0' : '8px',
+                marginRight: index === icons.length - 1 ? '0' : '8px'
+              }"
               slot="reference"
               :icon-class="icon.icon"
             />
