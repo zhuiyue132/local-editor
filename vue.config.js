@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-05-25 10:03:09
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-30 18:00:51
+ * @Last Modified time: 2020-07-03 14:53:39
  * @Desc: vue-cli@3.x config
  */
 const path = require('path')
@@ -44,7 +44,7 @@ module.exports = {
   chainWebpack: config => {
     config.plugin('html').tap(args => {
       const arg = args
-      arg[0].title = 'Editor'
+      arg[0].title = 'Zhuiyue Editor'
       return args
     })
 

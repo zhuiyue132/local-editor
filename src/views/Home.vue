@@ -1,5 +1,5 @@
 <template>
-  <div class="home" @dragenter.prevent="dragover = true">
+  <div class="home" @dragover.prevent.stop="dragover = true">
     <el-container>
       <el-header class="md-header">
         <template v-for="(icon, index) in icons">
@@ -49,17 +49,23 @@
     <el-upload
       drag
       :show-file-list="false"
-      :style="{ zIndex: dragover ? 2001 : -1 }"
+      :style="{ zIndex: dragover ? 10001 : -1 }"
       action="https://imgkr.com/api/v2/files/upload"
       with-credentials
       name="file"
       ref="upload"
       class="full-screen-upload"
+      :accept="accept"
       :on-success="handleUploadSuccess"
       :on-error="handleUploadError"
+      :before-upload="beforeUpload"
     >
-      11111</el-upload
-    >
+      <template v-if="dragover">
+        <div class="upload-tip">
+          将文件拖到此处，松手即可完成上传
+        </div>
+      </template>
+    </el-upload>
   </div>
 </template>
 
@@ -124,7 +130,8 @@ export default {
       showDropdownBtn: false,
       codeStr: '',
       parsedHtml: null,
-      dragover: false
+      dragover: false,
+      accept: '.png,.jpg,.gif,.bmp,.jpeg'
     }
   },
   watch: {
@@ -150,10 +157,58 @@ export default {
 
     window.localStorage.setItem(FIRST_ENTRY_KEY, 1)
   },
+
   mounted() {
-    console.log('this.$refs.upload :>> ', this.$refs.upload)
+    const element = document.getElementsByClassName('el-upload-dragger')[0]
+    on(element, 'dragleave', e => {
+      e.stopPropagation()
+      e.preventDefault()
+      this.dragover = false
+    })
+
+    on(element, 'drop', e => {
+      e.stopPropagation()
+      e.preventDefault()
+      console.log('e.dataTransfer.files:>> ', e.dataTransfer.files)
+      if (!this.fileExtensionValidator(e.dataTransfer.files)) {
+        this.$message.error('不支持该文件类型的上传')
+        this.dragover = false
+      }
+    })
   },
   methods: {
+    fileExtensionValidator(files) {
+      const target = [].slice.call(files).filter(file => {
+        const { type, name } = file
+        const extension = name.indexOf('.') > -1 ? `.${name.split('.').pop()}` : ''
+        const baseType = type.replace(/\/.*$/, '')
+
+        return this.accept
+          .split(',')
+          .map(t => t.trim())
+          .some(acceptedType => {
+            if (/\..+$/.test(acceptedType)) {
+              return extension === acceptedType
+            }
+            if (/\/\*$/.test(acceptedType)) {
+              return baseType === acceptedType.replace(/\/\*$/, '')
+            }
+            return false
+          })
+      })
+      console.log('file filter after :>> ', target)
+      return target.length > 0
+    },
+    beforeUpload(file) {
+      const size = 10
+      const gtLimitSize = file.size / 1024 / 1024 > size
+
+      if (gtLimitSize) {
+        this.$message.error(`图片上传不能超过${size}M`)
+        this.dragover = false
+      }
+      return !gtLimitSize
+    },
     handleUploadSuccess(res) {
       console.log('pic upload success :>> ', res)
       this.dragover = false
@@ -283,6 +338,29 @@ ${rt}
     position: fixed;
     left: 0;
     top: 0;
+    .upload-tip {
+      width: 100%;
+      height: 100%;
+      padding-top: 240px;
+      font-size: 36px;
+      &::before {
+        font-family: element-icons !important;
+        font-style: normal;
+        font-weight: 400;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        display: block;
+        font-size: 120px;
+        content: '\e7c3';
+      }
+      &::after {
+        display: block;
+        font-size: 28px;
+        margin-top: 10px;
+        content: '只能上传【png,jpg,jpeg,gif,bmp】格式文件，且不超过10M';
+      }
+    }
   }
 }
 </style>
@@ -292,5 +370,16 @@ ${rt}
   height: 100vh;
   z-index: inherit;
   background-color: rgba(255, 255, 255, 0.75);
+  .el-upload__text {
+    font-size: 36px;
+    font-weight: bold;
+  }
+  .el-upload__tip {
+    font-size: 28px;
+  }
+  &.is-dragover {
+    background-color: rgba(32, 159, 255, 0.55);
+    color: #fff;
+  }
 }
 </style>
