@@ -14,7 +14,7 @@ jobs:
       uses: actions/checkout@develop # 将代码拷贝到虚机中
 
     - name: buildAndDeploy
-      uses: zhuiyue132/markdown-editor@develop
+      uses: JamesIves/github-pages-deploy-action@develop 
       env:
         ACCESS_TOKEN: ${{ secrets.access_token}}
         BRANCH: gh-pages # 存放产物的分支名称
