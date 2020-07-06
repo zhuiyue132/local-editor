@@ -1,0 +1,22 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # 我们选择使用最新的ubuntu系统
+    steps:
+    - name: checkout
+      uses: actions/checkout@develop # 将代码拷贝到虚机中
+
+    - name: buildAndDeploy
+      uses: zhuiyue132/markdown-editor@develop
+      env:
+        ACCESS_TOKEN: ${{ secrets.access_token}}
+        BRANCH: gh-pages # 存放产物的分支名称
+        FOLDER: dist # 存放build后产物的目录
+        BUILD_SCRIPT: npm install && npm run build # 执行的命令
