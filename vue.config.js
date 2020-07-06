@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-05-25 10:03:09
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-07-06 15:58:01
+ * @Last Modified time: 2020-07-06 16:20:25
  * @Desc: vue-cli@3.x config
  */
 const path = require('path')
@@ -14,7 +14,7 @@ function resolve(dir) {
 }
 
 module.exports = {
-  publicPath: '/',
+  publicPath: '',
   productionSourceMap: false,
   assetsDir: 'static',
   configureWebpack: config => {
