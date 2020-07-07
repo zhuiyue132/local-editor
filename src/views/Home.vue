@@ -122,6 +122,11 @@ const mkd = new Markdown({
     delimiters: 'dollars',
     katexOptions: { macros: { '\\RR': '\\mathbb{R}' } }
   })
+  .use(require('markdown-it-code-copy'), {
+    iconClass: 'el-icon-copy-document',
+    buttonStyle:
+      'border:none;background-color:rgba(0,0,0,0);position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;'
+  })
 
 export default {
   name: 'Home',
