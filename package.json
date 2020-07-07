@@ -25,6 +25,7 @@
     "markdown-it-katex": "^2.0.3",
     "markdown-it-mark": "^3.0.0",
     "markdown-it-task-checkbox": "^1.0.6",
+    "markdown-it-texmath": "^0.7.1",
     "normalize.css": "^8.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",
