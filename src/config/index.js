@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:23:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-29 20:46:31
+ * @Last Modified time: 2020-07-07 16:26:25
  * @Desc: config
  */
 import store from '@/store'
@@ -190,21 +190,20 @@ show your code here！
     template: `
 1. text - 1
 1. text - 2`
+  },
+  {
+    icon: 'formula',
+    iconName: '公式',
+    template: `
+$$sin^2a + cos^2a =1 $$ 
+`
   }
 
-  // {
-  //   icon: 'link',
-  //   iconName: '插入链接'
-  // }
   // {
   //   icon: 'flow',
   //   iconName: '流程'
   // },
 
-  // {
-  //   icon: 'formula',
-  //   iconName: '公式'
-  // },
   // {
   //   icon: 'ganta',
   //   iconName: '甘特图'
