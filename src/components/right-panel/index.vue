@@ -8,7 +8,7 @@
       <div class="handle-button" :style="{ top: '200px' }">
         <svg-icon icon-class="preview" />
       </div>
-      <div class="handle-button" :style="{ top: '300px' }">
+      <div class="handle-button" :style="{ top: '300px' }" @click.stop="$emit('download:markdown')">
         <svg-icon icon-class="markdown" />
       </div>
       <div class="handle-button" :style="{ top: '350px' }">

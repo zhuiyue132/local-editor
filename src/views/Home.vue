@@ -48,7 +48,7 @@
       </el-main>
     </el-container>
 
-    <right-panel>
+    <right-panel @download:markdown="handleDownloadMarkdown">
       <settings />
     </right-panel>
 
@@ -157,6 +157,24 @@ export default {
     })
   },
   methods: {
+    // eslint-disable-next-line consistent-return
+    handleDownloadMarkdown() {
+      if (!('download' in document.createElement('a'))) {
+        return this.$message.error('浏览器不支持')
+      }
+      const codeValue = this.$refs.code.getValue()
+      if (!codeValue) {
+        return this.$message.error('先写点东西再导出吧')
+      }
+      const elem = document.createElement('a')
+      elem.download = 'draft.md'
+      elem.style.display = 'none'
+      const blob = new Blob([codeValue], { type: 'text/plain' })
+      elem.href = URL.createObjectURL(blob)
+      document.body.appendChild(elem)
+      elem.click()
+      document.body.removeChild(elem)
+    },
     fileExtensionValidator(files) {
       const target = [].slice.call(files).filter(file => {
         const { type, name } = file
@@ -350,6 +368,7 @@ ${rt}
   height: 100vh;
   z-index: inherit;
   background-color: rgba(255, 255, 255, 0.75);
+  border: none;
   .el-upload__text {
     font-size: 36px;
     font-weight: bold;
