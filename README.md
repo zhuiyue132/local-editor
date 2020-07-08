@@ -13,8 +13,8 @@
 
 ### 🏠 [Homepage](https://github.com/zhuiyue132/markdown-editor)
 
-### ✨ [Demo](https://zhuiyue132.gitee.io/editor)
-
+### ✨ [Demo-码云](https://zhuiyue132.gitee.io/editor)（可能没有及时更新）
+### ✨ [Demo-github](http://zhuiyue132.github.io/markdown-editor/) （可能资源加载缓慢）
 ## Install
 
 ```sh
