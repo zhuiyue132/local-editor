@@ -127,6 +127,12 @@ const mkd = new Markdown({
     buttonStyle:
       'border:none;background-color:rgba(0,0,0,0);position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;'
   })
+  .use(require('markdown-it-container'))
+  .use(require('markdown-it-plantuml'), {
+    imageFormat: 'png',
+    openMarker: '@uml',
+    closeMarker: '@uml'
+  })
 
 export default {
   name: 'Home',
