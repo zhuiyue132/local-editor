@@ -1,5 +1,5 @@
 <template>
-  <div class="md-preview-area">
+  <div id="previewArea" class="md-preview-area">
     <github-corner style="position: absolute; top: 50px; border: 0; right: 0;"></github-corner>
     <div v-html="value"></div>
   </div>

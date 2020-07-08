@@ -5,14 +5,19 @@
       <div class="handle-button" :style="{ top: buttonTop + 'px' }" @click="show = !show">
         <i :class="show ? 'el-icon-close' : 'el-icon-setting'" />
       </div>
-      <div class="handle-button" :style="{ top: '200px' }">
+      <!-- <div class="handle-button" :style="{ top: '200px' }">
         <svg-icon icon-class="preview" />
-      </div>
+      </div> -->
       <div class="handle-button" :style="{ top: '300px' }" @click.stop="$emit('download:markdown')">
-        <svg-icon icon-class="markdown" />
+        <el-tooltip content="导出.md文件" placement="left">
+          <svg-icon icon-class="markdown" />
+        </el-tooltip>
       </div>
-      <div class="handle-button" :style="{ top: '350px' }">
-        <svg-icon icon-class="pdf" />
+
+      <div class="handle-button" :style="{ top: '350px' }" @click.stop="$emit('download:png')">
+        <el-tooltip content="导出.png文件" placement="left">
+          <svg-icon icon-class="pdf" />
+        </el-tooltip>
       </div>
       <div class="rightPanel-items">
         <slot />
@@ -45,11 +50,6 @@ export default {
       if (value && !this.clickNotClose) {
         this.addEventClick()
       }
-      // if (value) {
-      //   addClass(document.body, 'showRightPanel')
-      // } else {
-      //   removeClass(document.body, 'showRightPanel')
-      // }
     }
   },
   mounted() {
@@ -136,7 +136,7 @@ export default {
   position: absolute;
   left: -48px;
   text-align: center;
-  font-size: 24px;
+  font-size: 28px;
   border-radius: 6px 0 0 6px !important;
   z-index: 0;
   pointer-events: auto;

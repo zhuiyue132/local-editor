@@ -15,6 +15,7 @@
     "core-js": "^3.6.4",
     "element-ui": "^2.13.2",
     "highlight.js": "^10.1.1",
+    "html2canvas": "^1.0.0-rc.5",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "markdown-it": "^11.0.0",

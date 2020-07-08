@@ -48,7 +48,7 @@
       </el-main>
     </el-container>
 
-    <right-panel @download:markdown="handleDownloadMarkdown">
+    <right-panel @download:markdown="handleDownloadMarkdown" @download:png="handleDownloadPng">
       <settings />
     </right-panel>
 
@@ -79,6 +79,7 @@
 /* eslint-disable no-case-declarations */
 
 import debounce from 'lodash/debounce'
+import html2canvas from 'html2canvas'
 
 import CodeArea from '@/components/code-area'
 import PreviewArea from '@/components/preview-area'
@@ -90,6 +91,7 @@ import icons from '@/config'
 import { on, setCode, getCode, isFirstEntry, FIRST_ENTRY_KEY } from '@/util'
 import templateCode from '@/config/template'
 import mkd from './mkd'
+import canvas2image from '@/util/canvas2image.js'
 
 export default {
   name: 'Home',
@@ -157,19 +159,42 @@ export default {
     })
   },
   methods: {
-    // eslint-disable-next-line consistent-return
-    handleDownloadMarkdown() {
+    codeValueValidator() {
       if (!('download' in document.createElement('a'))) {
-        return this.$message.error('浏览器不支持')
+        this.$message.error('浏览器不支持')
+        return false
       }
-      const codeValue = this.$refs.code.getValue()
+      const codeValue = this.$refs.code.getValue().replace(/\s/g, '')
       if (!codeValue) {
-        return this.$message.error('先写点东西再导出吧')
+        this.$message.error('先写点东西再导出吧')
+        return false
       }
+      return true
+    },
+    handleDownloadPng() {
+      if (!this.codeValueValidator()) return
+      html2canvas(document.getElementById('previewArea'), {
+        logging: false,
+        useCORS: true, // 允许使用跨域图片
+        allowTaint: false // 不允许跨域图片污染画布
+      }).then(canvas => {
+        const image = canvas2image.convertToPNG(canvas, canvas.width, canvas.height)
+        const elem = document.createElement('a')
+        elem.download = 'draft.png'
+        elem.style.display = 'none'
+        elem.href = image.src
+        document.body.appendChild(elem)
+        elem.click()
+        document.body.removeChild(elem)
+      })
+    },
+    handleDownloadMarkdown() {
+      if (!this.codeValueValidator()) return
+
       const elem = document.createElement('a')
       elem.download = 'draft.md'
       elem.style.display = 'none'
-      const blob = new Blob([codeValue], { type: 'text/plain' })
+      const blob = new Blob([this.$refs.code.getValue()], { type: 'text/plain' })
       elem.href = URL.createObjectURL(blob)
       document.body.appendChild(elem)
       elem.click()
