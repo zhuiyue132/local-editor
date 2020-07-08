@@ -79,8 +79,6 @@
 /* eslint-disable no-case-declarations */
 
 import debounce from 'lodash/debounce'
-import hljs from 'highlight.js'
-import 'highlight.js/styles/default.css'
 
 import CodeArea from '@/components/code-area'
 import PreviewArea from '@/components/preview-area'
@@ -90,32 +88,8 @@ import TableSizeSelector from '@/components/table-size-selector'
 import LinkAssitor from '@/components/link-assitor'
 import icons from '@/config'
 import { on, setCode, getCode, isFirstEntry, FIRST_ENTRY_KEY } from '@/util'
-import Markdown from 'markdown-it'
 import templateCode from '@/config/template'
-
-const mkd = new Markdown({
-  html: true,
-  highlight: (str, lang) => {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        const formatted = hljs
-          .highlight(lang, str, true)
-          .value.replace(/\n/g, '<br/>') // 换行用br表示
-          .replace(/\s/g, '&nbsp;') // 用nbsp替换空格
-          .replace(/span&nbsp;/g, 'span ') // span标签修复
-        return `<pre class="custom"><code class="hljs">${formatted}</code></pre>`
-      } catch (e) {
-        throw Error(e)
-      }
-    }
-    return `<pre class="custom"><code class="hljs">${str}</code></pre>`
-  }
-})
-  .use(require('markdown-it-footnote'))
-  .use(require('markdown-it-emoji'))
-  .use(require('markdown-it-ins'))
-  .use(require('markdown-it-mark'))
-  .use(require('markdown-it-task-checkbox'))
+import mkd from './mkd'
 
 export default {
   name: 'Home',

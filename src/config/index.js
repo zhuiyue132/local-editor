@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:23:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-29 20:46:31
+ * @Last Modified time: 2020-07-08 14:38:23
  * @Desc: config
  */
 import store from '@/store'
@@ -34,18 +34,6 @@ export default [
       store.state.ace.aceEditor.redo()
     }
   },
-  // {
-  //   icon: 'arrow-left',
-  //   iconName: '回退'
-  // },
-  // {
-  //   icon: 'arrow-right',
-  //   iconName: '恢复'
-  // },
-  // {
-  //   icon: 'dark-mode',
-  //   iconName: '切换模式'
-  // },
   // {
   //   icon: 'downscale',
   //   iconName: '恢复浏览器'
@@ -190,28 +178,21 @@ show your code here！
     template: `
 1. text - 1
 1. text - 2`
+  },
+  {
+    icon: 'formula',
+    iconName: '公式',
+    template: `
+$$sin^2a + cos^2a =1 $$ 
+`
+  },
+  {
+    icon: 'shixu',
+    iconName: '时序图',
+    template: `
+@uml
+Bob -> Alice : hello
+@uml 
+`
   }
-
-  // {
-  //   icon: 'link',
-  //   iconName: '插入链接'
-  // }
-  // {
-  //   icon: 'flow',
-  //   iconName: '流程'
-  // },
-
-  // {
-  //   icon: 'formula',
-  //   iconName: '公式'
-  // },
-  // {
-  //   icon: 'ganta',
-  //   iconName: '甘特图'
-  // },
-
-  // {
-  //   icon: 'image',
-  //   iconName: '上传图片'
-  // }
 ]

@@ -17,6 +17,16 @@ export default {
       type: String,
       default: ''
     }
+  },
+  updated() {
+    const preview = document.querySelector('.md-preview-area')
+    const imgList = preview.querySelectorAll('img')
+    for (let index = 0; index < imgList.length; index++) {
+      const element = imgList[index]
+      element.addEventListener('mousedown', e => {
+        e.preventDefault()
+      })
+    }
   }
 }
 </script>
