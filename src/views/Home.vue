@@ -48,7 +48,7 @@
       </el-main>
     </el-container>
 
-    <right-panel @download:markdown="handleDownloadMarkdown" @download:png="handleDownloadPng">
+    <right-panel @download:markdown="debounceDownloadMarkdown" @download:png="debounceDownloadPng">
       <settings />
     </right-panel>
 
@@ -113,7 +113,8 @@ export default {
       codeStr: '',
       parsedHtml: null,
       dragover: false,
-      accept: '.png,.jpg,.gif,.bmp,.jpeg'
+      accept: '.png,.jpg,.gif,.bmp,.jpeg',
+      DNRA: window.localStorage.getItem('DNRA') === 'true' || false
     }
   },
   watch: {
@@ -138,6 +139,9 @@ export default {
     }
 
     window.localStorage.setItem(FIRST_ENTRY_KEY, 1)
+
+    this.debounceDownloadPng = debounce(this.handleDownloadPng, 300)
+    this.debounceDownloadMarkdown = debounce(this.handleDownloadMarkdown, 300)
   },
 
   mounted() {
@@ -171,22 +175,77 @@ export default {
       }
       return true
     },
+    createPng() {
+      return Promise.resolve().then(() => {
+        const scale = 2
+        html2canvas(document.getElementById('previewArea'), {
+          logging: false,
+          scale,
+          useCORS: true, // 允许使用跨域图片
+          allowTaint: false // 不允许跨域图片污染画布
+        }).then(canvas => {
+          const image = canvas2image.convertToPNG(canvas, canvas.width * scale, canvas.height * scale)
+          const elem = document.createElement('a')
+          elem.download = 'draft.png'
+          elem.style.display = 'none'
+          elem.href = image.src
+          document.body.appendChild(elem)
+          elem.click()
+          document.body.removeChild(elem)
+        })
+      })
+    },
     handleDownloadPng() {
       if (!this.codeValueValidator()) return
-      html2canvas(document.getElementById('previewArea'), {
-        logging: false,
-        useCORS: true, // 允许使用跨域图片
-        allowTaint: false // 不允许跨域图片污染画布
-      }).then(canvas => {
-        const image = canvas2image.convertToPNG(canvas, canvas.width, canvas.height)
-        const elem = document.createElement('a')
-        elem.download = 'draft.png'
-        elem.style.display = 'none'
-        elem.href = image.src
-        document.body.appendChild(elem)
-        elem.click()
-        document.body.removeChild(elem)
-      })
+
+      if (this.DNRA) {
+        this.createPng()
+      } else {
+        const h = this.$createElement
+        this.$msgbox({
+          title: '导出预览图',
+          message: h('p', null, [
+            h('div', null, '上传的图片属跨域资源，在图片导出中无法显示，请知悉。'),
+            h('i', { style: 'color: teal;text-decoration: line-through;' }, '毕竟我连自己的服务器都没有'),
+            h(
+              'el-checkbox',
+              {
+                style: 'position:absolute;bottom:-40px;left:0',
+                ref: 'DNRA'
+              },
+              '不再提示'
+            )
+          ]),
+          showCancelButton: true,
+          confirmButtonText: '好的',
+          cancelButtonText: '算了',
+          beforeClose: (action, instance, done) => {
+            if (action === 'confirm') {
+              instance.confirmButtonLoading = true
+              instance.confirmButtonText = '正在导出...'
+              // DNRA = do not remind again
+              const DNRA = instance.$children
+                .find(item => item.$el.tagName.toUpperCase() === 'LABEL' && item.$el.classList.contains('el-checkbox'))
+                .$el.classList.contains('is-checked')
+
+              if (DNRA) {
+                window.localStorage.setItem('DNRA', DNRA)
+                this.DNRA = true
+              }
+              this.createPng().then(() => {
+                done()
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false
+                }, 300)
+              })
+            } else {
+              done()
+            }
+          }
+        }).catch(error => {
+          console.log('user clicked cancel :>> ', error)
+        })
+      }
     },
     handleDownloadMarkdown() {
       if (!this.codeValueValidator()) return
