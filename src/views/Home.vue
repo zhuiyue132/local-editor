@@ -176,23 +176,22 @@ export default {
       return true
     },
     createPng() {
-      return Promise.resolve().then(() => {
-        const scale = 2
-        html2canvas(document.getElementById('previewArea'), {
-          logging: false,
-          scale,
-          useCORS: true, // 允许使用跨域图片
-          allowTaint: false // 不允许跨域图片污染画布
-        }).then(canvas => {
-          const image = canvas2image.convertToPNG(canvas, canvas.width * scale, canvas.height * scale)
-          const elem = document.createElement('a')
-          elem.download = 'draft.png'
-          elem.style.display = 'none'
-          elem.href = image.src
-          document.body.appendChild(elem)
-          elem.click()
-          document.body.removeChild(elem)
-        })
+      const scale = 1
+      // html2canvas 方法返回的是 promise 承诺
+      return html2canvas(document.getElementById('previewArea'), {
+        logging: false,
+        scale,
+        useCORS: true, // 允许使用跨域图片
+        allowTaint: false // 不允许跨域图片污染画布
+      }).then(canvas => {
+        const image = canvas2image.convertToPNG(canvas, canvas.width * scale, canvas.height * scale)
+        const elem = document.createElement('a')
+        elem.download = 'draft.png'
+        elem.style.display = 'none'
+        elem.href = image.src
+        document.body.appendChild(elem)
+        elem.click()
+        document.body.removeChild(elem)
       })
     },
     handleDownloadPng() {
