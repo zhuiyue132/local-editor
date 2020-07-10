@@ -42,13 +42,7 @@
       </el-header>
 
       <el-main class="md-main">
-        <code-area
-          v-model="codeStr"
-          ref="code"
-          @changeCursor="handlePositionChange"
-          @changeScrollTop="handlePositionChange"
-          class="area-item"
-        />
+        <code-area v-model="codeStr" ref="code" @changeScrollTop="debouncePositionChange" class="area-item" />
         <el-divider class="area-split-line" direction="vertical" />
         <preview-area :value="parsedHtml" class="area-item" />
       </el-main>
@@ -148,10 +142,12 @@ export default {
 
     this.debounceDownloadPng = debounce(this.handleDownloadPng, 300)
     this.debounceDownloadMarkdown = debounce(this.handleDownloadMarkdown, 300)
+    this.debouncePositionChange = debounce(this.handlePositionChange, 10)
   },
 
   mounted() {
     const element = document.getElementsByClassName('el-upload-dragger')[0]
+    // TODO: off events
     on(element, 'dragleave', e => {
       e.stopPropagation()
       e.preventDefault()
@@ -174,23 +170,27 @@ export default {
       const { ace } = this.$refs.code
       const topLineCodeVal = ace.getSession().getLine(cursor.row)
 
-      // console.log(curPos)
+      // 将顶部第一行的codeVal 解析成 dom 元素
       const wrapper = document.createElement('div')
       wrapper.innerHTML = mkd.render(topLineCodeVal) // 此时还是个html格式的字符串
       const html = wrapper.firstChild
       if (!html || html.nodeName === '#text') return
 
-      html.setAttribute('id', 'scrolltaget')
+      html.setAttribute('id', 'scrollTarget')
       html.style.display = 'none'
       document.body.appendChild(html)
+      /**
+       * 实际上采用的是字符串的对比，将解析成dom的val，拆出innerText进行对比
+       */
+
+      // 插入到dom中便于访问元素，并获取元素内部的innerText，用完后移除
 
       const innerText =
         html.children.length === 0
           ? html.innerText.trim()
-          : [...document.getElementById('scrolltaget').querySelectorAll('*')]
+          : [...document.getElementById('scrollTarget').querySelectorAll('*')]
               .find(item => item.children.length === 0)
               .innerText.trim()
-
       document.body.removeChild(html)
 
       const originPageY = ace.renderer.getScrollTop()
@@ -201,9 +201,9 @@ export default {
 
       try {
         const includesTextList = [...document.querySelector('#previewArea > div').querySelectorAll('*')]
-          .filter(item => (item.innerText || '').indexOf(innerText) > -1)
+          // .filter(item => (item.innerText || '').indexOf(innerText) > -1)
+          .filter(item => item.innerText === innerText && Boolean(item.innerText) && item.tagName === html.tagName)
           .filter(item => item.children.length <= 1)
-
         if (includesTextList.length > 0) {
           const s = (originPageY + curPos.pageY) / totalHeight
           const bodyHeight = document.body.offsetHeight
@@ -216,7 +216,7 @@ export default {
           document.getElementById('previewArea').scrollTop = value
         }
       } catch (error) {
-        console.log(error)
+        console.log('autoscroll occured error :>> ', error)
       }
     },
 
@@ -233,6 +233,7 @@ export default {
       return true
     },
     createPng() {
+      // FIXME: 待修正  图片只有显示区域的bug
       const scale = 1
       // html2canvas 方法返回的是 promise 承诺
       return html2canvas(document.getElementById('previewArea'), {
@@ -334,7 +335,6 @@ export default {
             return false
           })
       })
-      console.log('file filter after :>> ', target)
       return target.length > 0
     },
     beforeUpload(file) {
@@ -382,7 +382,6 @@ ${tableSeparate}
 ${rt}
 
 `
-          console.log('table template :>> ', ret)
           this.$refs.code.ace.insert(ret)
           break
         case 'link':

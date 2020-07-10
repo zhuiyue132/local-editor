@@ -70,10 +70,6 @@ export default {
     const handleChangeEvent = debounce(this.handleOnChange, 300)
     this.ace.getSession().on('change', handleChangeEvent)
 
-    // this.ace.getSession().selection.on('changeCursor', () => {
-    //   this.$emit('changeCursor', this.ace.getCursorPosition())
-    // })
-
     this.ace.getSession().on('changeScrollTop', () => {
       this.$emit('changeScrollTop', {
         row: this.ace.renderer.getFirstFullyVisibleRow(),
