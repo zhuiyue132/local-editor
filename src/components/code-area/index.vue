@@ -70,10 +70,16 @@ export default {
     const handleChangeEvent = debounce(this.handleOnChange, 300)
     this.ace.getSession().on('change', handleChangeEvent)
 
-    this.ace.getSession().selection.on('changeSelection', () => {
-      console.log('text selected was changed :>> ', this.ace.session.getTextRange(this.ace.getSelectionRange()))
-    })
+    // this.ace.getSession().selection.on('changeCursor', () => {
+    //   this.$emit('changeCursor', this.ace.getCursorPosition())
+    // })
 
+    this.ace.getSession().on('changeScrollTop', () => {
+      this.$emit('changeScrollTop', {
+        row: this.ace.renderer.getFirstFullyVisibleRow(),
+        column: 0
+      })
+    })
     // 保存编辑器实例
     this.$store.commit('SET_EDITOR', this.ace)
   },
@@ -86,8 +92,13 @@ export default {
       if (!this.ace) return ''
       return this.ace.session.getTextRange(this.ace.getSelectionRange())
     },
-    getValue() {
+    /**
+     * 当传入行号时，返回对应行号的value
+     * 否则，返回全部的value
+     */
+    getValue(row) {
       if (!this.ace) return ''
+      if (row !== undefined) return this.ace.getSession().getLine(row)
       return this.ace.getSession().getValue()
     }
   }

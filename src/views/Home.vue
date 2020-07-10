@@ -42,13 +42,19 @@
       </el-header>
 
       <el-main class="md-main">
-        <code-area v-model="codeStr" ref="code" class="area-item" />
+        <code-area
+          v-model="codeStr"
+          ref="code"
+          @changeCursor="handlePositionChange"
+          @changeScrollTop="handlePositionChange"
+          class="area-item"
+        />
         <el-divider class="area-split-line" direction="vertical" />
         <preview-area :value="parsedHtml" class="area-item" />
       </el-main>
     </el-container>
 
-    <right-panel>
+    <right-panel @download:markdown="debounceDownloadMarkdown" @download:png="debounceDownloadPng">
       <settings />
     </right-panel>
 
@@ -79,6 +85,7 @@
 /* eslint-disable no-case-declarations */
 
 import debounce from 'lodash/debounce'
+import html2canvas from 'html2canvas'
 
 import CodeArea from '@/components/code-area'
 import PreviewArea from '@/components/preview-area'
@@ -90,6 +97,7 @@ import icons from '@/config'
 import { on, setCode, getCode, isFirstEntry, FIRST_ENTRY_KEY } from '@/util'
 import templateCode from '@/config/template'
 import mkd from './mkd'
+import canvas2image from '@/util/canvas2image.js'
 
 export default {
   name: 'Home',
@@ -111,7 +119,8 @@ export default {
       codeStr: '',
       parsedHtml: null,
       dragover: false,
-      accept: '.png,.jpg,.gif,.bmp,.jpeg'
+      accept: '.png,.jpg,.gif,.bmp,.jpeg',
+      DNRA: window.localStorage.getItem('DNRA') === 'true' || false
     }
   },
   watch: {
@@ -136,6 +145,9 @@ export default {
     }
 
     window.localStorage.setItem(FIRST_ENTRY_KEY, 1)
+
+    this.debounceDownloadPng = debounce(this.handleDownloadPng, 300)
+    this.debounceDownloadMarkdown = debounce(this.handleDownloadMarkdown, 300)
   },
 
   mounted() {
@@ -157,6 +169,152 @@ export default {
     })
   },
   methods: {
+    handlePositionChange(cursor = {}) {
+      // 获取光标或者顶部第一行的行列数据
+      const { ace } = this.$refs.code
+      const topLineCodeVal = ace.getSession().getLine(cursor.row)
+
+      // console.log(curPos)
+      const wrapper = document.createElement('div')
+      wrapper.innerHTML = mkd.render(topLineCodeVal) // 此时还是个html格式的字符串
+      const html = wrapper.firstChild
+      if (!html || html.nodeName === '#text') return
+
+      html.setAttribute('id', 'scrolltaget')
+      html.style.display = 'none'
+      document.body.appendChild(html)
+
+      const innerText =
+        html.children.length === 0
+          ? html.innerText.trim()
+          : [...document.getElementById('scrolltaget').querySelectorAll('*')]
+              .find(item => item.children.length === 0)
+              .innerText.trim()
+
+      document.body.removeChild(html)
+
+      const originPageY = ace.renderer.getScrollTop()
+      const curPos = ace.renderer.textToScreenCoordinates(cursor.row, cursor.column)
+      const prevPos = ace.renderer.textToScreenCoordinates(cursor.row - 1, cursor.column)
+      // 编辑器的总高度 = 行高 x 总行数
+      const totalHeight = ace.getSession().getLength() * Math.abs(prevPos.pageY - curPos.pageY)
+
+      try {
+        const includesTextList = [...document.querySelector('#previewArea > div').querySelectorAll('*')]
+          .filter(item => (item.innerText || '').indexOf(innerText) > -1)
+          .filter(item => item.children.length <= 1)
+
+        if (includesTextList.length > 0) {
+          const s = (originPageY + curPos.pageY) / totalHeight
+          const bodyHeight = document.body.offsetHeight
+          const timeLine = includesTextList.sort((pushup, forSelector) => {
+            const h = pushup.offsetTop / bodyHeight
+            const d = forSelector.offsetTop / bodyHeight
+            return Math.abs(s - h) - Math.abs(s - d)
+          })
+          const value = timeLine[0].offsetTop - curPos.pageY
+          document.getElementById('previewArea').scrollTop = value
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    codeValueValidator() {
+      if (!('download' in document.createElement('a'))) {
+        this.$message.error('浏览器不支持')
+        return false
+      }
+      const codeValue = this.$refs.code.getValue().replace(/\s/g, '')
+      if (!codeValue) {
+        this.$message.error('先写点东西再导出吧')
+        return false
+      }
+      return true
+    },
+    createPng() {
+      const scale = 1
+      // html2canvas 方法返回的是 promise 承诺
+      return html2canvas(document.getElementById('previewArea'), {
+        logging: false,
+        scale,
+        useCORS: true, // 允许使用跨域图片
+        allowTaint: false // 不允许跨域图片污染画布
+      }).then(canvas => {
+        const image = canvas2image.convertToPNG(canvas, canvas.width * scale, canvas.height * scale)
+        const elem = document.createElement('a')
+        elem.download = 'draft.png'
+        elem.style.display = 'none'
+        elem.href = image.src
+        document.body.appendChild(elem)
+        elem.click()
+        document.body.removeChild(elem)
+      })
+    },
+    handleDownloadPng() {
+      if (!this.codeValueValidator()) return
+
+      if (this.DNRA) {
+        this.createPng()
+      } else {
+        const h = this.$createElement
+        this.$msgbox({
+          title: '导出预览图',
+          message: h('p', null, [
+            h('div', null, '上传的图片属跨域资源，在图片导出中无法显示，请知悉。'),
+            h('i', { style: 'color: teal;text-decoration: line-through;' }, '毕竟我连自己的服务器都没有'),
+            h(
+              'el-checkbox',
+              {
+                style: 'position:absolute;bottom:-40px;left:0',
+                ref: 'DNRA'
+              },
+              '不再提示'
+            )
+          ]),
+          showCancelButton: true,
+          confirmButtonText: '好的',
+          cancelButtonText: '算了',
+          beforeClose: (action, instance, done) => {
+            if (action === 'confirm') {
+              instance.confirmButtonLoading = true
+              instance.confirmButtonText = '正在导出...'
+              // DNRA = do not remind again
+              const DNRA = instance.$children
+                .find(item => item.$el.tagName.toUpperCase() === 'LABEL' && item.$el.classList.contains('el-checkbox'))
+                .$el.classList.contains('is-checked')
+
+              if (DNRA) {
+                window.localStorage.setItem('DNRA', DNRA)
+                this.DNRA = true
+              }
+              this.createPng().then(() => {
+                done()
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false
+                }, 300)
+              })
+            } else {
+              done()
+            }
+          }
+        }).catch(error => {
+          console.log('user clicked cancel :>> ', error)
+        })
+      }
+    },
+    handleDownloadMarkdown() {
+      if (!this.codeValueValidator()) return
+
+      const elem = document.createElement('a')
+      elem.download = 'draft.md'
+      elem.style.display = 'none'
+      const blob = new Blob([this.$refs.code.getValue()], { type: 'text/plain' })
+      elem.href = URL.createObjectURL(blob)
+      document.body.appendChild(elem)
+      elem.click()
+      document.body.removeChild(elem)
+    },
     fileExtensionValidator(files) {
       const target = [].slice.call(files).filter(file => {
         const { type, name } = file
@@ -197,6 +355,7 @@ export default {
     handleUploadError() {
       this.dragover = false
     },
+
     handleAssit(data = {}) {
       console.log('data :>> ', data)
       this.$refs.pop[0].doClose()
@@ -218,7 +377,7 @@ ${tempRt}`
           }
           const ret = `
 
-${th}  
+${th}
 ${tableSeparate}
 ${rt}
 
@@ -234,9 +393,11 @@ ${rt}
       }
     },
 
-    // eslint-disable-next-line consistent-return
     handleHeaderIconClick({ template, callback, isSymmetrical, defaultTemplate }) {
-      if (callback) return callback()
+      if (callback) {
+        callback()
+        return
+      }
       // 当前光标包裹了内容，需要将选中的内容，用对称标签 重新包裹
       let ret = null
       if (isSymmetrical) {
@@ -256,6 +417,7 @@ ${rt}
 
       this.$refs.code.ace.insert(ret)
     },
+
     handleResize() {
       const { innerWidth } = window
       if (innerWidth > icons.length * this.SINGLE_ICON_WIDTH + this.PADDING) {
@@ -350,6 +512,7 @@ ${rt}
   height: 100vh;
   z-index: inherit;
   background-color: rgba(255, 255, 255, 0.75);
+  border: none;
   .el-upload__text {
     font-size: 36px;
     font-weight: bold;

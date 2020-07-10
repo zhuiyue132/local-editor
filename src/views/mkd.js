@@ -42,5 +42,6 @@ const mkd = new Markdown({
     openMarker: '@uml',
     closeMarker: '@uml'
   })
+  .use(require('markdown-it-kbd'))
 
 export default mkd

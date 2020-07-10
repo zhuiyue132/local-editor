@@ -14,7 +14,7 @@ body {
 .custom::before {
   content: '';
   display: block;
-  background: url(https://imgkr.cn-bj.ufileos.com/97e4eed2-a992-4976-acf0-ccb6fb34d308.png);
+  background: url(../assets/code-header.png);
   height: 30px;
   width: 100%;
   background-size: 40px;
@@ -131,13 +131,21 @@ pre {
   color: #666;
   font-family: Courier, sans-serif;
 }
-code {
+code,
+kbd {
   color: #c7254e;
   background-color: #f9f2f4;
   border-radius: 4px;
   font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
   padding: 2px 4px;
   font-size: 90%;
+}
+kbd {
+  background: #eee;
+  border: 0.15rem solid #ddd;
+  border-bottom: 0.25rem solid #ddd;
+  border-radius: 0.15rem;
+  padding: 0 0.15em;
 }
 p > code {
   color: #c7264e;

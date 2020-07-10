@@ -2,31 +2,24 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:42:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-24 10:24:17
+ * @Last Modified time: 2020-07-08 16:28:36
  * @Desc: 初始进入的模板配置
  */
 /* eslint-disable  */
 
 export default `
-![](https://imgkr.cn-bj.ufileos.com/b4c806dd-caa2-43f4-82d9-796ce6716267.svg)
 
-请使用 **Chrome** 浏览器。
+请使用 **Chrome** 浏览器，其他浏览器不保证运行正常。
 
-请阅读下方文本熟悉工具使用方法，本文可直接拷贝到微信中预览。
+以下是使用说明，如果需要进行创作，**全选=>删除本文** 即可开始。
 
-## 1 Markdown Nice 简介
+## 0 简介
 
-- 支持自定义样式的 Markdown 编辑器
-- 支持微信公众号、知乎和稀土掘金
-- 欢迎扫码回复「排版」加入用户群
+一个 \`demo\` 级别的 web版 markdown 编辑器。基于\`markdown-it\`及其\`插件集\`。  
 
-![](https://imgkr.cn-bj.ufileos.com/c3690018-4a92-4766-ac7e-ac54dd54c093.jpg)
+没错，我就是api搬运工。
 
-## 2 主题
-
-**https://preview.mdnice.com/themes/**
-
-欢迎提交主题，提供更多文章示例~~
+## 1 布局
 
 ## 3 通用语法
 
