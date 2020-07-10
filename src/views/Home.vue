@@ -234,7 +234,7 @@ export default {
     },
     createPng() {
       // FIXME: 待修正  图片只有显示区域的bug
-      const scale = 1
+      const scale = 1.5
       // html2canvas 方法返回的是 promise 承诺
       return html2canvas(document.getElementById('previewArea'), {
         logging: false,
