@@ -42,7 +42,13 @@
       </el-header>
 
       <el-main class="md-main">
-        <code-area v-model="codeStr" ref="code" class="area-item" />
+        <code-area
+          v-model="codeStr"
+          ref="code"
+          @changeCursor="handlePositionChange"
+          @changeScrollTop="handlePositionChange"
+          class="area-item"
+        />
         <el-divider class="area-split-line" direction="vertical" />
         <preview-area :value="parsedHtml" class="area-item" />
       </el-main>
@@ -163,6 +169,57 @@ export default {
     })
   },
   methods: {
+    handlePositionChange(cursor = {}) {
+      // 获取光标或者顶部第一行的行列数据
+      const { ace } = this.$refs.code
+      const topLineCodeVal = ace.getSession().getLine(cursor.row)
+
+      // console.log(curPos)
+      const wrapper = document.createElement('div')
+      wrapper.innerHTML = mkd.render(topLineCodeVal) // 此时还是个html格式的字符串
+      const html = wrapper.firstChild
+      if (!html || html.nodeName === '#text') return
+
+      html.setAttribute('id', 'scrolltaget')
+      html.style.display = 'none'
+      document.body.appendChild(html)
+
+      const innerText =
+        html.children.length === 0
+          ? html.innerText.trim()
+          : [...document.getElementById('scrolltaget').querySelectorAll('*')]
+              .find(item => item.children.length === 0)
+              .innerText.trim()
+
+      document.body.removeChild(html)
+
+      const originPageY = ace.renderer.getScrollTop()
+      const curPos = ace.renderer.textToScreenCoordinates(cursor.row, cursor.column)
+      const prevPos = ace.renderer.textToScreenCoordinates(cursor.row - 1, cursor.column)
+      // 编辑器的总高度 = 行高 x 总行数
+      const totalHeight = ace.getSession().getLength() * Math.abs(prevPos.pageY - curPos.pageY)
+
+      try {
+        const includesTextList = [...document.querySelector('#previewArea > div').querySelectorAll('*')]
+          .filter(item => (item.innerText || '').indexOf(innerText) > -1)
+          .filter(item => item.children.length <= 1)
+
+        if (includesTextList.length > 0) {
+          const s = (originPageY + curPos.pageY) / totalHeight
+          const bodyHeight = document.body.offsetHeight
+          const timeLine = includesTextList.sort((pushup, forSelector) => {
+            const h = pushup.offsetTop / bodyHeight
+            const d = forSelector.offsetTop / bodyHeight
+            return Math.abs(s - h) - Math.abs(s - d)
+          })
+          const value = timeLine[0].offsetTop - curPos.pageY
+          document.getElementById('previewArea').scrollTop = value
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
     codeValueValidator() {
       if (!('download' in document.createElement('a'))) {
         this.$message.error('浏览器不支持')
@@ -298,6 +355,7 @@ export default {
     handleUploadError() {
       this.dragover = false
     },
+
     handleAssit(data = {}) {
       console.log('data :>> ', data)
       this.$refs.pop[0].doClose()
@@ -319,7 +377,7 @@ ${tempRt}`
           }
           const ret = `
 
-${th}  
+${th}
 ${tableSeparate}
 ${rt}
 
@@ -335,9 +393,11 @@ ${rt}
       }
     },
 
-    // eslint-disable-next-line consistent-return
     handleHeaderIconClick({ template, callback, isSymmetrical, defaultTemplate }) {
-      if (callback) return callback()
+      if (callback) {
+        callback()
+        return
+      }
       // 当前光标包裹了内容，需要将选中的内容，用对称标签 重新包裹
       let ret = null
       if (isSymmetrical) {
@@ -357,6 +417,7 @@ ${rt}
 
       this.$refs.code.ace.insert(ret)
     },
+
     handleResize() {
       const { innerWidth } = window
       if (innerWidth > icons.length * this.SINGLE_ICON_WIDTH + this.PADDING) {
