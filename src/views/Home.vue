@@ -1,5 +1,5 @@
 <template>
-  <div class="home" @dragover.prevent.stop="dragover = true">
+  <div class="home" @dragover.prevent.stop="handleDragover">
     <el-container>
       <el-header class="md-header">
         <template v-for="(icon, index) in icons">
@@ -80,7 +80,7 @@
 
 import debounce from 'lodash/debounce'
 import html2canvas from 'html2canvas'
-
+import { mapState } from 'vuex'
 import CodeArea from '@/components/code-area'
 import PreviewArea from '@/components/preview-area'
 import RightPanel from '@/components/right-panel'
@@ -116,6 +116,11 @@ export default {
       accept: '.png,.jpg,.gif,.bmp,.jpeg',
       DNRA: window.localStorage.getItem('DNRA') === 'true' || false
     }
+  },
+  computed: {
+    ...mapState({
+      picBedStatus: state => state.settings.picBedStatus
+    })
   },
   watch: {
     codeStr: {
@@ -165,6 +170,10 @@ export default {
     })
   },
   methods: {
+    handleDragover() {
+      if (!this.picBedStatus) return
+      this.dragover = true
+    },
     handlePositionChange(cursor = {}) {
       // 获取光标或者顶部第一行的行列数据
       const { ace } = this.$refs.code

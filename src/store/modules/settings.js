@@ -2,16 +2,26 @@
  * @Author: chenghao
  * @Date: 2020-06-19 10:40:58
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-28 14:38:26
+ * @Last Modified time: 2020-07-13 15:22:56
  * @Desc: setting
  */
-import { getTheme, setTheme, getFontSize, setFontSize, getGutter, setGutter } from '@/util'
+import {
+  getTheme,
+  setTheme,
+  getFontSize,
+  setFontSize,
+  getGutter,
+  setGutter,
+  getPicBedStatus,
+  setPicBedStatus
+} from '@/util'
 
 export default {
   state: {
     theme: getTheme() || 'ace/theme/chrome',
     fontSize: getFontSize() || 12,
-    showGutter: getGutter() !== 'false'
+    showGutter: getGutter() !== 'false',
+    picBedStatus: getPicBedStatus() !== 'false'
   },
   mutations: {
     SET_THEME(state, { theme }) {
@@ -25,6 +35,10 @@ export default {
     SET_GUTTER(state, { value }) {
       state.showGutter = value
       setGutter(value)
+    },
+    SET_PIC_BED_STATUS(state, { value }) {
+      state.picBedStatus = value
+      setPicBedStatus(value)
     }
   },
   actions: {
@@ -46,6 +60,13 @@ export default {
       console.log('showgutter was changed to :>> ', value)
       commit({
         type: 'SET_GUTTER',
+        value
+      })
+    },
+    togglePicBed({ commit }, value) {
+      console.log('pic bed was changed to :>> ', value)
+      commit({
+        type: 'SET_PIC_BED_STATUS',
         value
       })
     }

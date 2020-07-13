@@ -9,7 +9,7 @@
       </div>
       <div class="drawer-item">
         <span>启用图床</span>
-        <el-switch disabled="" v-model="pictureBedActivated" class="drawer-switch" />
+        <el-switch v-model="pictureBedActivated" class="drawer-switch" />
         <div class="drawer-tip">
           图床启用后，可以将【 jpeg, jpg, png, gif, bmp 】直接拖拽至编辑器中上传，图片将上传至
         </div>
@@ -63,7 +63,6 @@ export default {
       autoScrollActivated: false,
       pictureBedActivated: true,
       gutterActivated: true,
-      // cursorLineHighlightActivated: true,
       currentTheme: '',
       currentFontSize: ''
     }
@@ -72,7 +71,8 @@ export default {
     ...mapState({
       theme: state => state.settings.theme,
       fontSize: state => state.settings.fontSize,
-      showGutter: state => state.settings.showGutter
+      showGutter: state => state.settings.showGutter,
+      picBedStatus: state => state.settings.picBedStatus
     })
   },
   watch: {
@@ -88,12 +88,16 @@ export default {
     },
     gutterActivated(curr) {
       this.$store.dispatch('toggleGutter', curr)
+    },
+    pictureBedActivated(curr) {
+      this.$store.dispatch('togglePicBed', curr)
     }
   },
   created() {
     this.currentTheme = this.theme
     this.currentFontSize = this.fontSize
     this.gutterActivated = this.showGutter
+    this.pictureBedActivated = this.picBedStatus
   }
 }
 </script>
