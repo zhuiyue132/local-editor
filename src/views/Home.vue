@@ -56,9 +56,8 @@
       drag
       :show-file-list="false"
       :style="{ zIndex: dragover ? 10001 : -1 }"
-      action="https://imgkr.com/api/v2/files/upload"
-      with-credentials
-      name="file"
+      action="https://upload.qiniup.com"
+      :data="uploadParams"
       ref="upload"
       class="full-screen-upload"
       :accept="accept"
@@ -92,6 +91,8 @@ import { on, setCode, getCode, isFirstEntry, FIRST_ENTRY_KEY } from '@/util'
 import templateCode from '@/config/template'
 import mkd from './mkd'
 import canvas2image from '@/util/canvas2image.js'
+import { generateQiniuToken } from '@/util/qiniu.token.js'
+import qiniu from '@/config/qiniu'
 
 export default {
   name: 'Home',
@@ -114,6 +115,9 @@ export default {
       parsedHtml: null,
       dragover: false,
       accept: '.png,.jpg,.gif,.bmp,.jpeg',
+      uploadParams: {
+        token: ''
+      },
       DNRA: window.localStorage.getItem('DNRA') === 'true' || false
     }
   },
@@ -144,6 +148,7 @@ export default {
     }
 
     window.localStorage.setItem(FIRST_ENTRY_KEY, 1)
+    this.uploadParams.token = generateQiniuToken()
 
     this.debounceDownloadPng = debounce(this.handleDownloadPng, 300)
     this.debounceDownloadMarkdown = debounce(this.handleDownloadMarkdown, 300)
@@ -359,7 +364,8 @@ export default {
     handleUploadSuccess(res) {
       console.log('pic upload success :>> ', res)
       this.dragover = false
-      this.$refs.code.ace.insert(` ![alt](${res.data})`)
+      this.uploadParams.token = generateQiniuToken()
+      this.$refs.code.ace.insert(` ![alt](${qiniu.cdnAddress}${res.key})`)
     },
     handleUploadError() {
       this.dragover = false
