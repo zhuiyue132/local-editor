@@ -365,7 +365,7 @@ export default {
       console.log('pic upload success :>> ', res)
       this.dragover = false
       this.uploadParams.token = generateQiniuToken()
-      this.$refs.code.ace.insert(` ![alt](${qiniu.cdnAddress}${res.key})`)
+      this.$refs.code.ace.insert(` ![alt](${qiniu.cdnAddress}${res.key}/z)`)
     },
     handleUploadError() {
       this.dragover = false
