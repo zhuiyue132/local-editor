@@ -6,13 +6,13 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "gitee": "bash ./deploy2gitee.sh",
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
   "dependencies": {
     "ace-builds": "^1.4.11",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "crypto-js": "^4.0.0",
     "element-ui": "^2.13.2",
     "highlight.js": "^10.1.1",
     "html2canvas": "^1.0.0-rc.5",

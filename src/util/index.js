@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:51:51
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-06-28 14:39:31
+ * @Last Modified time: 2020-07-13 15:22:20
  * @Desc: 工具函数
  */
 
@@ -50,6 +50,7 @@ export const FIRST_ENTRY_KEY = 'first_entry'
 const THEME_KEY = 'theme'
 const FONT_SIZE_KEY = 'font_size'
 const GUTTER_KEY = 'show_gutter'
+const PIC_BED_KEY = 'pic_bed_avaliable'
 
 export function setCode(str) {
   window.localStorage.setItem(CODE_KEY, str)
@@ -89,4 +90,11 @@ export function setGutter(str) {
 
 export function getGutter() {
   return window.localStorage.getItem(GUTTER_KEY)
+}
+
+export function getPicBedStatus() {
+  return window.localStorage.getItem(PIC_BED_KEY)
+}
+export function setPicBedStatus(str) {
+  window.localStorage.setItem(PIC_BED_KEY, str)
 }

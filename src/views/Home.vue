@@ -1,5 +1,5 @@
 <template>
-  <div class="home" @dragover.prevent.stop="dragover = true">
+  <div class="home" @dragover.prevent.stop="handleDragover">
     <el-container>
       <el-header class="md-header">
         <template v-for="(icon, index) in icons">
@@ -42,13 +42,7 @@
       </el-header>
 
       <el-main class="md-main">
-        <code-area
-          v-model="codeStr"
-          ref="code"
-          @changeCursor="handlePositionChange"
-          @changeScrollTop="handlePositionChange"
-          class="area-item"
-        />
+        <code-area v-model="codeStr" ref="code" @changeScrollTop="debouncePositionChange" class="area-item" />
         <el-divider class="area-split-line" direction="vertical" />
         <preview-area :value="parsedHtml" class="area-item" />
       </el-main>
@@ -62,9 +56,8 @@
       drag
       :show-file-list="false"
       :style="{ zIndex: dragover ? 10001 : -1 }"
-      action="https://imgkr.com/api/v2/files/upload"
-      with-credentials
-      name="file"
+      action="https://upload.qiniup.com"
+      :data="uploadParams"
       ref="upload"
       class="full-screen-upload"
       :accept="accept"
@@ -86,7 +79,7 @@
 
 import debounce from 'lodash/debounce'
 import html2canvas from 'html2canvas'
-
+import { mapState } from 'vuex'
 import CodeArea from '@/components/code-area'
 import PreviewArea from '@/components/preview-area'
 import RightPanel from '@/components/right-panel'
@@ -98,6 +91,8 @@ import { on, setCode, getCode, isFirstEntry, FIRST_ENTRY_KEY } from '@/util'
 import templateCode from '@/config/template'
 import mkd from './mkd'
 import canvas2image from '@/util/canvas2image.js'
+import { generateQiniuToken } from '@/util/qiniu.token.js'
+import qiniu from '@/config/qiniu'
 
 export default {
   name: 'Home',
@@ -120,8 +115,16 @@ export default {
       parsedHtml: null,
       dragover: false,
       accept: '.png,.jpg,.gif,.bmp,.jpeg',
+      uploadParams: {
+        token: ''
+      },
       DNRA: window.localStorage.getItem('DNRA') === 'true' || false
     }
+  },
+  computed: {
+    ...mapState({
+      picBedStatus: state => state.settings.picBedStatus
+    })
   },
   watch: {
     codeStr: {
@@ -145,13 +148,16 @@ export default {
     }
 
     window.localStorage.setItem(FIRST_ENTRY_KEY, 1)
+    this.uploadParams.token = generateQiniuToken()
 
     this.debounceDownloadPng = debounce(this.handleDownloadPng, 300)
     this.debounceDownloadMarkdown = debounce(this.handleDownloadMarkdown, 300)
+    this.debouncePositionChange = debounce(this.handlePositionChange, 10)
   },
 
   mounted() {
     const element = document.getElementsByClassName('el-upload-dragger')[0]
+    // TODO: off events
     on(element, 'dragleave', e => {
       e.stopPropagation()
       e.preventDefault()
@@ -169,28 +175,36 @@ export default {
     })
   },
   methods: {
+    handleDragover() {
+      if (!this.picBedStatus) return
+      this.dragover = true
+    },
     handlePositionChange(cursor = {}) {
       // 获取光标或者顶部第一行的行列数据
       const { ace } = this.$refs.code
       const topLineCodeVal = ace.getSession().getLine(cursor.row)
 
-      // console.log(curPos)
+      // 将顶部第一行的codeVal 解析成 dom 元素
       const wrapper = document.createElement('div')
       wrapper.innerHTML = mkd.render(topLineCodeVal) // 此时还是个html格式的字符串
       const html = wrapper.firstChild
       if (!html || html.nodeName === '#text') return
 
-      html.setAttribute('id', 'scrolltaget')
+      html.setAttribute('id', 'scrollTarget')
       html.style.display = 'none'
       document.body.appendChild(html)
+      /**
+       * 实际上采用的是字符串的对比，将解析成dom的val，拆出innerText进行对比
+       */
+
+      // 插入到dom中便于访问元素，并获取元素内部的innerText，用完后移除
 
       const innerText =
         html.children.length === 0
           ? html.innerText.trim()
-          : [...document.getElementById('scrolltaget').querySelectorAll('*')]
+          : [...document.getElementById('scrollTarget').querySelectorAll('*')]
               .find(item => item.children.length === 0)
               .innerText.trim()
-
       document.body.removeChild(html)
 
       const originPageY = ace.renderer.getScrollTop()
@@ -201,9 +215,9 @@ export default {
 
       try {
         const includesTextList = [...document.querySelector('#previewArea > div').querySelectorAll('*')]
-          .filter(item => (item.innerText || '').indexOf(innerText) > -1)
+          // .filter(item => (item.innerText || '').indexOf(innerText) > -1)
+          .filter(item => item.innerText === innerText && Boolean(item.innerText) && item.tagName === html.tagName)
           .filter(item => item.children.length <= 1)
-
         if (includesTextList.length > 0) {
           const s = (originPageY + curPos.pageY) / totalHeight
           const bodyHeight = document.body.offsetHeight
@@ -216,7 +230,7 @@ export default {
           document.getElementById('previewArea').scrollTop = value
         }
       } catch (error) {
-        console.log(error)
+        console.log('autoscroll occured error :>> ', error)
       }
     },
 
@@ -233,7 +247,8 @@ export default {
       return true
     },
     createPng() {
-      const scale = 1
+      // FIXME: 待修正  图片只有显示区域的bug
+      const scale = 1.5
       // html2canvas 方法返回的是 promise 承诺
       return html2canvas(document.getElementById('previewArea'), {
         logging: false,
@@ -334,7 +349,6 @@ export default {
             return false
           })
       })
-      console.log('file filter after :>> ', target)
       return target.length > 0
     },
     beforeUpload(file) {
@@ -350,7 +364,8 @@ export default {
     handleUploadSuccess(res) {
       console.log('pic upload success :>> ', res)
       this.dragover = false
-      this.$refs.code.ace.insert(` ![alt](${res.data})`)
+      this.uploadParams.token = generateQiniuToken()
+      this.$refs.code.ace.insert(` ![alt](${qiniu.cdnAddress}${res.key})`)
     },
     handleUploadError() {
       this.dragover = false
@@ -382,7 +397,6 @@ ${tableSeparate}
 ${rt}
 
 `
-          console.log('table template :>> ', ret)
           this.$refs.code.ace.insert(ret)
           break
         case 'link':
