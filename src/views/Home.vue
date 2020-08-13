@@ -117,8 +117,7 @@ export default {
       accept: '.png,.jpg,.gif,.bmp,.jpeg',
       uploadParams: {
         token: ''
-      },
-      DNRA: window.localStorage.getItem('DNRA') === 'true' || false
+      }
     }
   },
   computed: {
@@ -246,11 +245,11 @@ export default {
       }
       return true
     },
-    createPng() {
-      // FIXME: 待修正  图片只有显示区域的bug
+    handleDownloadPng() {
+      if (!this.codeValueValidator()) return
       const scale = 1.5
       // html2canvas 方法返回的是 promise 承诺
-      return html2canvas(document.getElementById('previewArea'), {
+      html2canvas(document.querySelector('#previewArea > div'), {
         logging: false,
         scale,
         useCORS: true, // 允许使用跨域图片
@@ -258,65 +257,13 @@ export default {
       }).then(canvas => {
         const image = canvas2image.convertToPNG(canvas, canvas.width * scale, canvas.height * scale)
         const elem = document.createElement('a')
-        elem.download = 'draft.png'
+        elem.download = 'draft.jpeg'
         elem.style.display = 'none'
         elem.href = image.src
         document.body.appendChild(elem)
         elem.click()
         document.body.removeChild(elem)
       })
-    },
-    handleDownloadPng() {
-      if (!this.codeValueValidator()) return
-
-      if (this.DNRA) {
-        this.createPng()
-      } else {
-        const h = this.$createElement
-        this.$msgbox({
-          title: '导出预览图',
-          message: h('p', null, [
-            h('div', null, '上传的图片属跨域资源，在图片导出中无法显示，请知悉。'),
-            h('i', { style: 'color: teal;text-decoration: line-through;' }, '毕竟我连自己的服务器都没有'),
-            h(
-              'el-checkbox',
-              {
-                style: 'position:absolute;bottom:-40px;left:0',
-                ref: 'DNRA'
-              },
-              '不再提示'
-            )
-          ]),
-          showCancelButton: true,
-          confirmButtonText: '好的',
-          cancelButtonText: '算了',
-          beforeClose: (action, instance, done) => {
-            if (action === 'confirm') {
-              instance.confirmButtonLoading = true
-              instance.confirmButtonText = '正在导出...'
-              // DNRA = do not remind again
-              const DNRA = instance.$children
-                .find(item => item.$el.tagName.toUpperCase() === 'LABEL' && item.$el.classList.contains('el-checkbox'))
-                .$el.classList.contains('is-checked')
-
-              if (DNRA) {
-                window.localStorage.setItem('DNRA', DNRA)
-                this.DNRA = true
-              }
-              this.createPng().then(() => {
-                done()
-                setTimeout(() => {
-                  instance.confirmButtonLoading = false
-                }, 300)
-              })
-            } else {
-              done()
-            }
-          }
-        }).catch(error => {
-          console.log('user clicked cancel :>> ', error)
-        })
-      }
     },
     handleDownloadMarkdown() {
       if (!this.codeValueValidator()) return
