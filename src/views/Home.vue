@@ -48,7 +48,7 @@
       </el-main>
     </el-container>
 
-    <right-panel @download:markdown="debounceDownloadMarkdown" @download:png="debounceDownloadPng">
+    <right-panel @markdown="debounceDownloadMarkdown" @pdf="debounceDownloadPdf">
       <settings />
     </right-panel>
 
@@ -80,6 +80,7 @@
 import debounce from 'lodash/debounce'
 import html2canvas from 'html2canvas'
 import { mapState } from 'vuex'
+import JsPDF from 'jspdf'
 import CodeArea from '@/components/code-area'
 import PreviewArea from '@/components/preview-area'
 import RightPanel from '@/components/right-panel'
@@ -87,10 +88,9 @@ import Settings from '@/components/settings'
 import TableSizeSelector from '@/components/table-size-selector'
 import LinkAssitor from '@/components/link-assitor'
 import icons from '@/config'
-import { on, setCode, getCode, isFirstEntry, FIRST_ENTRY_KEY } from '@/util'
+import { on, off, setCode, getCode, isFirstEntry, FIRST_ENTRY_KEY } from '@/util'
 import templateCode from '@/config/template'
 import mkd from './mkd'
-import canvas2image from '@/util/canvas2image.js'
 import { generateQiniuToken } from '@/util/qiniu.token.js'
 import qiniu from '@/config/qiniu'
 
@@ -149,21 +149,20 @@ export default {
     window.localStorage.setItem(FIRST_ENTRY_KEY, 1)
     this.uploadParams.token = generateQiniuToken()
 
-    this.debounceDownloadPng = debounce(this.handleDownloadPng, 300)
+    this.debounceDownloadPdf = debounce(this.handleDownloadPdf, 300)
     this.debounceDownloadMarkdown = debounce(this.handleDownloadMarkdown, 300)
     this.debouncePositionChange = debounce(this.handlePositionChange, 10)
   },
 
   mounted() {
     const element = document.getElementsByClassName('el-upload-dragger')[0]
-    // TODO: off events
-    on(element, 'dragleave', e => {
+
+    const dragLeaveCallback = e => {
       e.stopPropagation()
       e.preventDefault()
       this.dragover = false
-    })
-
-    on(element, 'drop', e => {
+    }
+    const dropCallback = e => {
       e.stopPropagation()
       e.preventDefault()
       console.log('e.dataTransfer.files:>> ', e.dataTransfer.files)
@@ -171,6 +170,14 @@ export default {
         this.$message.error('不支持该文件类型的上传')
         this.dragover = false
       }
+    }
+    // 事件绑定
+    on(element, 'dragleave', dragLeaveCallback)
+    on(element, 'drop', dropCallback)
+    // 事件解绑
+    this.$once('hook:beforeDestroy', () => {
+      off(element, 'dragleave', dragLeaveCallback)
+      off(element, 'drop', dropCallback)
     })
   },
   methods: {
@@ -178,6 +185,7 @@ export default {
       if (!this.picBedStatus) return
       this.dragover = true
     },
+    // 滚动跟随计算
     handlePositionChange(cursor = {}) {
       // 获取光标或者顶部第一行的行列数据
       const { ace } = this.$refs.code
@@ -245,26 +253,64 @@ export default {
       }
       return true
     },
-    handleDownloadPng() {
+    // 下载预览结果的pdf文件
+    // FIXME: 当pdf 超过1页时，会有某一个整体的元素，如table，code 会被分割成横跨2页。当然，这个可以通过调整原稿来破解，但始终是个问题
+    // FIXME:  原稿超长时，会丢失部分元素的预览结果，测试到的有 pre > code 。
+    handleDownloadPdf() {
       if (!this.codeValueValidator()) return
       const scale = 1.1
+      const loadingInstance = this.$loading({ text: 'pdf导出中...', fullscreen: true })
       // html2canvas 方法返回的是 promise 承诺
       html2canvas(document.querySelector('#previewArea > div'), {
         logging: false,
+        backgroundColor: '#fff',
         scale,
         useCORS: true, // 允许使用跨域图片
         allowTaint: false // 不允许跨域图片污染画布
-      }).then(canvas => {
-        const image = canvas2image.convertToPNG(canvas, canvas.width * scale, canvas.height * scale)
-        const elem = document.createElement('a')
-        elem.download = 'draft.jpeg'
-        elem.style.display = 'none'
-        elem.href = image.src
-        document.body.appendChild(elem)
-        elem.click()
-        document.body.removeChild(elem)
       })
+        .then(canvas => {
+          const pdf = new JsPDF('p', 'mm', 'a4')
+          const ctx = canvas.getContext('2d')
+          const a4w = 190
+          const a4h = 277 // A4大小，210mm x 297mm，四边各保留10mm的边距，显示区域190x277
+          const imgHeight = Math.floor((a4h * canvas.width) / a4w) // 按A4显示比例换算一页图像的像素高度
+          let renderedHeight = 0
+          while (renderedHeight < canvas.height) {
+            const page = document.createElement('canvas')
+            page.width = canvas.width
+            page.height = Math.min(imgHeight, canvas.height - renderedHeight) // 可能内容不足一页
+
+            // 用getImageData剪裁指定区域，并画到前面创建的canvas对象中
+            page
+              .getContext('2d')
+              .putImageData(
+                ctx.getImageData(0, renderedHeight, canvas.width, Math.min(imgHeight, canvas.height - renderedHeight)),
+                0,
+                0
+              )
+            pdf.addImage(
+              page.toDataURL('image/jpeg', 1.0),
+              'JPEG',
+              10,
+              10,
+              a4w,
+              Math.min(a4h, (a4w * page.height) / page.width)
+            ) // 添加图像到页面，保留10mm边距
+
+            renderedHeight += imgHeight
+            if (renderedHeight < canvas.height) {
+              pdf.addPage()
+            } // 如果后面还有内容，添加一个空页
+          }
+          pdf.save(`draft.pdf`)
+        })
+        .finally(() => {
+          this.$nextTick(() => {
+            loadingInstance.close()
+          })
+        })
     },
+    // 下载.md格式的原稿
     handleDownloadMarkdown() {
       if (!this.codeValueValidator()) return
 
@@ -277,6 +323,7 @@ export default {
       elem.click()
       document.body.removeChild(elem)
     },
+    // 文件格式的校验
     fileExtensionValidator(files) {
       const target = [].slice.call(files).filter(file => {
         const { type, name } = file
@@ -308,6 +355,7 @@ export default {
       }
       return !gtLimitSize
     },
+    // 图片上传的响应 success/error
     handleUploadSuccess(res) {
       console.log('pic upload success :>> ', res)
       this.dragover = false
@@ -317,7 +365,7 @@ export default {
     handleUploadError() {
       this.dragover = false
     },
-
+    // 快捷插入辅助方法，一般是需要额外组件支持的按钮才会走到这里
     handleAssit(data = {}) {
       console.log('data :>> ', data)
       this.$refs.pop[0].doClose()
@@ -354,6 +402,7 @@ ${rt}
       }
     },
 
+    /* 顶部按钮点击事件 */
     handleHeaderIconClick({ template, callback, isSymmetrical, defaultTemplate }) {
       if (callback) {
         callback()
@@ -379,6 +428,7 @@ ${rt}
       this.$refs.code.ace.insert(ret)
     },
 
+    // 窗口尺寸变化事件，顶部的操作按钮的响应
     handleResize() {
       const { innerWidth } = window
       if (innerWidth > icons.length * this.SINGLE_ICON_WIDTH + this.PADDING) {
@@ -391,7 +441,9 @@ ${rt}
         this.iconreset = [...icons].splice(iconNum)
       }
     },
-
+    /**
+     * 解析编辑器的文本到html格式
+     */
     parseCodeStr() {
       return mkd.render(this.codeStr)
     }
