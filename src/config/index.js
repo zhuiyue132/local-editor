@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:23:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-07-08 14:38:23
+ * @Last Modified time: 2020-08-14 18:33:20
  * @Desc: config
  */
 import store from '@/store'
@@ -38,10 +38,10 @@ export default [
   //   icon: 'downscale',
   //   iconName: '恢复浏览器'
   // },
-  // {
-  //   icon: 'fullscreen',
-  //   iconName: '全屏'
-  // },
+  {
+    icon: 'fullscreen',
+    iconName: '全屏'
+  },
   // {
   //   icon: 'panel',
   //   iconName: '分割面板'
@@ -183,7 +183,7 @@ show your code here！
     icon: 'formula',
     iconName: '公式',
     template: `
-$$sin^2a + cos^2a =1 $$ 
+$$ sin^2a + cos^2a =1 $$ 
 `
   },
   {

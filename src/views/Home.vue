@@ -466,7 +466,8 @@ ${rt}
     background: #fff;
     top: 0;
     left: 0;
-    box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.1);
+    // box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ccc;
     > .md-input-base {
       margin-left: 20px;
     }
@@ -479,14 +480,14 @@ ${rt}
   }
   .md-main {
     padding: 0;
-    padding-top: 54px;
+    padding-top: 50px;
     display: flex;
     .area-item {
       width: calc(50vw - 1px);
-      min-height: calc(100vh - 54px);
+      min-height: calc(100vh - 50px);
     }
     .area-split-line {
-      height: calc(100vh - 54px);
+      height: calc(100vh - 50px);
     }
   }
   .full-screen-upload {
