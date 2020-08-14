@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:51:51
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-07-13 15:22:20
+ * @Last Modified time: 2020-08-14 15:25:33
  * @Desc: 工具函数
  */
 
@@ -51,6 +51,7 @@ const THEME_KEY = 'theme'
 const FONT_SIZE_KEY = 'font_size'
 const GUTTER_KEY = 'show_gutter'
 const PIC_BED_KEY = 'pic_bed_avaliable'
+const AUTO_SCROLL_KEY = 'auto_scroll'
 
 export function setCode(str) {
   window.localStorage.setItem(CODE_KEY, str)
@@ -97,4 +98,12 @@ export function getPicBedStatus() {
 }
 export function setPicBedStatus(str) {
   window.localStorage.setItem(PIC_BED_KEY, str)
+}
+
+export function setAutoScroll(str) {
+  window.localStorage.setItem(AUTO_SCROLL_KEY, str)
+}
+
+export function getAutoScroll() {
+  return window.localStorage.getItem(AUTO_SCROLL_KEY)
 }

@@ -8,14 +8,14 @@
       <!-- <div class="handle-button" :style="{ top: '200px' }">
         <svg-icon icon-class="preview" />
       </div> -->
-      <div class="handle-button" :style="{ top: '300px' }" @click.stop="$emit('download:markdown')">
+      <div class="handle-button" :style="{ top: '300px' }" @click.stop="$emit('markdown')">
         <el-tooltip content="导出.md文件" placement="left">
           <svg-icon icon-class="markdown" />
         </el-tooltip>
       </div>
 
-      <div class="handle-button" :style="{ top: '350px' }" @click.stop="$emit('download:png')">
-        <el-tooltip content="导出.png文件" placement="left">
+      <div class="handle-button" :style="{ top: '350px' }" @click.stop="$emit('pdf')">
+        <el-tooltip content="导出.pdf文件" placement="left">
           <svg-icon icon-class="pdf" />
         </el-tooltip>
       </div>
@@ -60,9 +60,6 @@ export default {
     elx.remove()
   },
   methods: {
-    handleButtonClick(type) {
-      console.log(type)
-    },
     addEventClick() {
       window.addEventListener('click', this.closeSidebar)
     },
