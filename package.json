@@ -19,7 +19,6 @@
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "markdown-it": "^11.0.0",
-    "markdown-it-code-copy": "^0.1.0",
     "markdown-it-container": "^3.0.0",
     "markdown-it-emoji": "^1.4.0",
     "markdown-it-footnote": "^3.0.2",

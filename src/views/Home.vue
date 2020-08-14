@@ -247,7 +247,7 @@ export default {
     },
     handleDownloadPng() {
       if (!this.codeValueValidator()) return
-      const scale = 1.5
+      const scale = 1.1
       // html2canvas 方法返回的是 promise 承诺
       html2canvas(document.querySelector('#previewArea > div'), {
         logging: false,
