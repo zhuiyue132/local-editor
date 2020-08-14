@@ -122,7 +122,8 @@ export default {
   },
   computed: {
     ...mapState({
-      picBedStatus: state => state.settings.picBedStatus
+      picBedStatus: state => state.settings.picBedStatus,
+      autoScroll: state => state.settings.autoScroll
     })
   },
   watch: {
@@ -187,6 +188,7 @@ export default {
     },
     // 滚动跟随计算
     handlePositionChange(cursor = {}) {
+      if (!this.autoScroll) return
       // 获取光标或者顶部第一行的行列数据
       const { ace } = this.$refs.code
       const topLineCodeVal = ace.getSession().getLine(cursor.row)

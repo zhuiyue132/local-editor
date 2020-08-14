@@ -15,7 +15,7 @@
       </div>
 
       <div class="handle-button" :style="{ top: '350px' }" @click.stop="$emit('pdf')">
-        <el-tooltip content="导出.png文件" placement="left">
+        <el-tooltip content="导出.pdf文件" placement="left">
           <svg-icon icon-class="pdf" />
         </el-tooltip>
       </div>

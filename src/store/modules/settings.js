@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-19 10:40:58
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-07-13 15:22:56
+ * @Last Modified time: 2020-08-14 16:12:26
  * @Desc: setting
  */
 import {
@@ -13,7 +13,9 @@ import {
   getGutter,
   setGutter,
   getPicBedStatus,
-  setPicBedStatus
+  setPicBedStatus,
+  setAutoScroll,
+  getAutoScroll
 } from '@/util'
 
 export default {
@@ -21,7 +23,8 @@ export default {
     theme: getTheme() || 'ace/theme/chrome',
     fontSize: getFontSize() || 12,
     showGutter: getGutter() !== 'false',
-    picBedStatus: getPicBedStatus() !== 'false'
+    picBedStatus: getPicBedStatus() !== 'false',
+    autoScroll: getAutoScroll() !== 'false'
   },
   mutations: {
     SET_THEME(state, { theme }) {
@@ -39,6 +42,10 @@ export default {
     SET_PIC_BED_STATUS(state, { value }) {
       state.picBedStatus = value
       setPicBedStatus(value)
+    },
+    SET_AUTO_SCROLL(state, { value }) {
+      state.autoScroll = value
+      setAutoScroll(value)
     }
   },
   actions: {
@@ -67,6 +74,13 @@ export default {
       console.log('pic bed was changed to :>> ', value)
       commit({
         type: 'SET_PIC_BED_STATUS',
+        value
+      })
+    },
+    toggleAutoScroll({ commit }, value) {
+      console.log('autoscroll was changed to :>> ', value)
+      commit({
+        type: 'SET_AUTO_SCROLL',
         value
       })
     }
