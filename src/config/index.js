@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:23:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-08-14 18:33:20
+ * @Last Modified time: 2020-08-15 11:12:20
  * @Desc: config
  */
 import store from '@/store'
@@ -40,7 +40,14 @@ export default [
   // },
   {
     icon: 'fullscreen',
-    iconName: '全屏'
+    iconName: '全屏',
+    callback: () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen()
+      } else {
+        document.body.requestFullscreen()
+      }
+    }
   },
   // {
   //   icon: 'panel',
