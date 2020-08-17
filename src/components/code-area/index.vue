@@ -49,7 +49,6 @@ export default {
     }
   },
   mounted() {
-    console.log('Ace :>> ', Ace)
     this.ace = Ace.edit(this.$refs.ace, {
       autoScrollEditorIntoView: true,
       copyWithEmptySelection: true,
