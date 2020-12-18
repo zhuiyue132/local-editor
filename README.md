@@ -13,7 +13,9 @@
 
 ### 🏠 [Homepage](https://github.com/zhuiyue132/markdown-editor)
 
-### ✨ [Demo](http://zhuiyue132.gitee.io/markdown-editor)
+
+### ✨ [Demo-码云](http://zhuiyue132.gitee.io/markdown-editor)（可能没有及时更新）
+### ✨ [Demo-github](http://zhuiyue132.github.io/markdown-editor/) （可能资源加载缓慢）
 
 ## Install
 
