@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:23:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-07-08 14:38:23
+ * @Last Modified time: 2020-08-17 17:27:35
  * @Desc: config
  */
 import store from '@/store'
@@ -19,7 +19,6 @@ import store from '@/store'
  * extraComponentName: 需要额外组件辅助完成功能时，填写辅助组件名，动态组件渲染。
  */
 export default [
-  // TODO: 前进后退时对是否可执行的判断
   {
     icon: 'arrow-left',
     iconName: '撤回',
@@ -34,18 +33,17 @@ export default [
       store.state.ace.aceEditor.redo()
     }
   },
-  // {
-  //   icon: 'downscale',
-  //   iconName: '恢复浏览器'
-  // },
-  // {
-  //   icon: 'fullscreen',
-  //   iconName: '全屏'
-  // },
-  // {
-  //   icon: 'panel',
-  //   iconName: '分割面板'
-  // },
+  {
+    icon: 'fullscreen',
+    iconName: '全屏',
+    callback: () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen()
+      } else {
+        document.body.requestFullscreen()
+      }
+    }
+  },
   {
     icon: 'bold',
     iconName: '加粗',
@@ -183,7 +181,7 @@ show your code here！
     icon: 'formula',
     iconName: '公式',
     template: `
-$$sin^2a + cos^2a =1 $$ 
+$$ sin^2a + cos^2a =1 $$ 
 `
   },
   {

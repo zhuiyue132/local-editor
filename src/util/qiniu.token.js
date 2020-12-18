@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-08-13 10:18:09
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-08-13 14:57:57
+ * @Last Modified time: 2020-08-17 17:48:34
  * @Desc: 七牛云token生成
  */
 
@@ -280,6 +280,5 @@ export function generateQiniuToken() {
   const putPolicy = JSON.stringify({ scope: qiniu.bucket, deadline: timestamp })
   const encodedPutPolicy = base64encode(utf16to8(putPolicy))
   const encodedSign = CryptoJS.HmacSHA1(encodedPutPolicy, qiniu.SecretKey).toString(CryptoJS.enc.Base64)
-  console.log('token :>>', `${qiniu.AccessKey}:${encodedSign}:${encodedPutPolicy}`)
   return `${qiniu.AccessKey}:${safe64(encodedSign)}:${encodedPutPolicy}`
 }

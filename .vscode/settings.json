@@ -4,7 +4,10 @@
   // 保存文件时自动格式化,主要针对html/css/less/scss等eslint未覆盖的文件格式
   // "editor.formatOnSave": true,
   // 保存文件时按照eslint配置自动处理vue/js/jsx/ts/json文件格式
-  // "eslint.autoFixOnSave": true,
+  // 开启eslint自动修复js/ts功能
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
   // 打开对vue的lint,并自动fix
   "eslint.validate": ["javascript", "javascriptreact", "vue"],
   // 对于.vue文件,关闭prettier,交给eslint fix

@@ -49,7 +49,6 @@ export default {
     }
   },
   mounted() {
-    console.log('Ace :>> ', Ace)
     this.ace = Ace.edit(this.$refs.ace, {
       autoScrollEditorIntoView: true,
       copyWithEmptySelection: true,
@@ -102,7 +101,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .md-code-area {
-  height: calc(100vh - 54px);
+  height: calc(100vh - 50px);
   overflow-y: auto;
   overflow-x: hidden;
 }
