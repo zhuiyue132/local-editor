@@ -13,7 +13,7 @@
 
 ### 🏠 [Homepage](https://github.com/zhuiyue132/markdown-editor)
 
-### ✨ [Demo](https://zhuiyue132.gitee.io/editor)
+### ✨ [Demo](http://zhuiyue132.gitee.io/markdown-editor)
 
 ## Install
 
@@ -32,7 +32,6 @@ npm run build
 
 👤 **追月**
 
-- Website: http://www.plutos.net.cn
 - Github: [@zhuiyue132](https://github.com/zhuiyue132)
 
 ## Show your support
