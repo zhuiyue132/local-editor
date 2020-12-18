@@ -101,7 +101,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .md-code-area {
-  height: calc(100vh - 54px);
+  height: calc(100vh - 50px);
   overflow-y: auto;
   overflow-x: hidden;
 }
