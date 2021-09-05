@@ -7,7 +7,7 @@
 export default {
   name: 'App',
   created() {
-    console.log('东西要买第一眼看中的，老婆要娶自己喜欢的！')
+    console.log('斯是陋室惟吾德馨')
   }
 }
 </script>
