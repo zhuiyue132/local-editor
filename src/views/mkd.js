@@ -26,11 +26,6 @@ const mkd = new Markdown({
   .use(require('markdown-it-mark'))
   .use(require('markdown-it-task-checkbox'))
   .use(require('markdown-it-container'))
-  .use(require('markdown-it-plantuml'), {
-    imageFormat: 'png',
-    openMarker: '@uml',
-    closeMarker: '@uml'
-  })
   .use(require('markdown-it-kbd'))
 
 export default mkd
