@@ -76,7 +76,8 @@ export default {
       theme: state => state.settings.theme,
       fontSize: state => state.settings.fontSize,
       showGutter: state => state.settings.showGutter,
-      picBedStatus: state => state.settings.picBedStatus
+      picBedStatus: state => state.settings.picBedStatus,
+      autoScroll: state => state.settings.autoScroll
     })
   },
   watch: {
@@ -95,6 +96,9 @@ export default {
     },
     pictureBedActivated(curr) {
       this.$store.dispatch('togglePicBed', curr)
+    },
+    autoScrollActivated(curr) {
+      this.$store.dispatch('toggleAutoScroll', curr)
     }
   },
   created() {
@@ -102,6 +106,7 @@ export default {
     this.currentFontSize = this.fontSize
     this.gutterActivated = this.showGutter
     this.pictureBedActivated = this.picBedStatus
+    this.autoScrollActivated = this.autoScroll
   }
 }
 </script>
