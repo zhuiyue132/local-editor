@@ -120,7 +120,7 @@ export default {
       codeStr: '',
       parsedHtml: null,
       dragover: false,
-      accept: '.png,.jpg,.gif,.bmp,.jpeg,.webp',
+      accept: '.png,.jpg,.gif,.bmp,.jpeg,.webp,.svg',
       uploadParams: {
         token: ''
       },
@@ -358,7 +358,7 @@ export default {
       return target.length > 0
     },
     beforeUpload(file) {
-      const size = 10
+      const size = 3
       const gtLimitSize = file.size / 1024 / 1024 > size
 
       if (gtLimitSize) {
@@ -497,10 +497,6 @@ ${rt}
       // width: calc(50vw - 1px);
       flex: 1;
       min-height: calc(100vh - 50px);
-      &.is-preview {
-        width: 50vw;
-        margin: 0 auto;
-      }
     }
     .area-split-line {
       height: calc(100vh - 50px);
@@ -509,8 +505,8 @@ ${rt}
       display: block;
       .area-item {
         flex: 0;
-        width: 70vw;
-        margin: 0 auto;
+        width: 100vw;
+        padding: 0 25vw;
       }
       .area-split-line {
         display: none;

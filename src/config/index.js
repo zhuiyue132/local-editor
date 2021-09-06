@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:23:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2021-09-05 21:17:41
+ * @Last Modified time: 2021-09-06 09:36:17
  * @Desc: config
  */
 import store from '@/store'
@@ -111,7 +111,9 @@ show your code here！
   {
     icon: 'image',
     iconName: '直接把图片拖动到页面内完成上传',
-    callback () { }
+    callback() {
+      console.log('直接把图片拖动到页面内完成上传')
+    }
   },
   {
     icon: 'h2',
