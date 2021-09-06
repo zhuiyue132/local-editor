@@ -15,8 +15,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@master # 将代码拷贝到虚机中
 
-      - name: buildAndDeploy
+      - name: build
         run: npm install && npm run build
+      - name: deploy
         uses: crazy-max/ghaction-github-pages@v2
         with:
           target_branch: gh-pages
