@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@master # 将代码拷贝到虚机中
 
       - name: buildAndDeploy
-        uses: JamesIves/github-pages-deploy-action@master
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         env:
           ACCESS_TOKEN: ${{ secrets.access_token}}
           BRANCH: gh-pages # 存放产物的分支名称
