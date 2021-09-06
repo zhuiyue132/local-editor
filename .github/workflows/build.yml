@@ -17,6 +17,7 @@ jobs:
 
       - name: build
         run: npm install && npm run build
+
       - name: deploy
         uses: crazy-max/ghaction-github-pages@v2
         with:
