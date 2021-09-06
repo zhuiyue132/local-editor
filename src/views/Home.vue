@@ -41,14 +41,20 @@
         </el-dropdown>
       </el-header>
 
-      <el-main class="md-main">
-        <code-area v-model="codeStr" ref="code" @changeScrollTop="debouncePositionChange" class="area-item" />
+      <el-main class="md-main" :class="{ 'is-preview': isPreview }">
+        <code-area
+          v-model="codeStr"
+          v-show="!isPreview"
+          ref="code"
+          @changeScrollTop="debouncePositionChange"
+          class="area-item"
+        />
         <el-divider class="area-split-line" direction="vertical" />
         <preview-area :value="parsedHtml" class="area-item" />
       </el-main>
     </el-container>
 
-    <right-panel @markdown="debounceDownloadMarkdown" @pdf="debounceDownloadPdf">
+    <right-panel @markdown="debounceDownloadMarkdown" @pdf="debounceDownloadPdf" @view="onView">
       <settings />
     </right-panel>
 
@@ -114,10 +120,11 @@ export default {
       codeStr: '',
       parsedHtml: null,
       dragover: false,
-      accept: '.png,.jpg,.gif,.bmp,.jpeg',
+      accept: '.png,.jpg,.gif,.bmp,.jpeg,.webp',
       uploadParams: {
         token: ''
-      }
+      },
+      isPreview: false
     }
   },
   computed: {
@@ -182,6 +189,9 @@ export default {
     })
   },
   methods: {
+    onView(isPreview) {
+      this.isPreview = isPreview
+    },
     handleDragover() {
       if (!this.picBedStatus) return
       this.dragover = true
@@ -406,6 +416,7 @@ ${rt}
 
     /* 顶部按钮点击事件 */
     handleHeaderIconClick({ template, callback, isSymmetrical, defaultTemplate }) {
+      if (this.isPreview) return
       if (callback) {
         callback()
         return
@@ -483,11 +494,27 @@ ${rt}
     padding-top: 50px;
     display: flex;
     .area-item {
-      width: calc(50vw - 1px);
+      // width: calc(50vw - 1px);
+      flex: 1;
       min-height: calc(100vh - 50px);
+      &.is-preview {
+        width: 50vw;
+        margin: 0 auto;
+      }
     }
     .area-split-line {
       height: calc(100vh - 50px);
+    }
+    &.is-preview {
+      display: block;
+      .area-item {
+        flex: 0;
+        width: 70vw;
+        margin: 0 auto;
+      }
+      .area-split-line {
+        display: none;
+      }
     }
   }
   .full-screen-upload {

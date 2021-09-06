@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:23:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-08-17 17:27:35
+ * @Last Modified time: 2021-09-05 21:17:41
  * @Desc: config
  */
 import store from '@/store'
@@ -111,7 +111,7 @@ show your code here！
   {
     icon: 'image',
     iconName: '直接把图片拖动到页面内完成上传',
-    callback() {}
+    callback () { }
   },
   {
     icon: 'h2',
@@ -176,21 +176,5 @@ show your code here！
     template: `
 1. text - 1
 1. text - 2`
-  },
-  {
-    icon: 'formula',
-    iconName: '公式',
-    template: `
-$$ sin^2a + cos^2a =1 $$ 
-`
-  },
-  {
-    icon: 'shixu',
-    iconName: '时序图',
-    template: `
-@uml
-Bob -> Alice : hello
-@uml 
-`
   }
 ]

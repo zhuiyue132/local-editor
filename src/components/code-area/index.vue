@@ -1,10 +1,6 @@
 <template>
   <div>
     <div class="md-code-area" ref="ace"></div>
-    <el-popover placement="top-start" width="300" class="hotkey-icon" trigger="hover">
-      <div>这里是快捷键提示</div>
-      <svg-icon slot="reference" icon-class="hotkey" class-name="hotkey-icon" />
-    </el-popover>
   </div>
 </template>
 <script>

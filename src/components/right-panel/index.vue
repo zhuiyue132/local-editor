@@ -2,6 +2,12 @@
   <div ref="rightPanel" :class="{ show: show }" class="rightPanel-container">
     <div class="rightPanel-background" />
     <div class="rightPanel">
+      <div class="handle-button" :style="{ top: '200px' }" @click="handlePreview">
+        <el-tooltip :content="isPreview ? '编辑' : '预览'" placement="left">
+          <i :class="isPreview ? 'el-icon-edit-outline' : 'el-icon-view'" />
+        </el-tooltip>
+      </div>
+
       <div class="handle-button" :style="{ top: buttonTop + 'px' }" @click="show = !show">
         <i :class="show ? 'el-icon-close' : 'el-icon-setting'" />
       </div>
@@ -41,7 +47,8 @@ export default {
   },
   data() {
     return {
-      show: false
+      show: false,
+      isPreview: false
     }
   },
 
@@ -60,6 +67,10 @@ export default {
     elx.remove()
   },
   methods: {
+    handlePreview() {
+      this.isPreview = !this.isPreview
+      this.$emit('view', this.isPreview)
+    },
     addEventClick() {
       window.addEventListener('click', this.closeSidebar)
     },
