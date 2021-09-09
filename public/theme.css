@@ -102,6 +102,9 @@ body {
   margin: 0;
   padding: 0;
 }
+* {
+  word-break: break-all;
+}
 .custom {
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.55) 0px 2px 10px;

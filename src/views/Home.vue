@@ -277,7 +277,7 @@ export default {
     // FIXME:  原稿超长时，会丢失部分元素的预览结果，测试到的有 pre > code 。
     handleDownloadPdf() {
       if (!this.codeValueValidator()) return
-      const scale = 1.1
+      const scale = 2
       const loadingInstance = this.$loading({ text: 'pdf导出中...', fullscreen: true })
       // html2canvas 方法返回的是 promise 承诺
       html2canvas(document.querySelector('#previewArea > div'), {
