@@ -54,7 +54,12 @@
       </el-main>
     </el-container>
 
-    <right-panel @markdown="debounceDownloadMarkdown" @pdf="debounceDownloadPdf" @view="onView">
+    <right-panel
+      @markdown="debounceDownloadMarkdown"
+      @pdf="debounceDownloadPdf"
+      @html="debounceDownloadHtml"
+      @view="onView"
+    >
       <settings />
     </right-panel>
 
@@ -99,6 +104,7 @@ import templateCode from '@/config/template'
 import mkd from './mkd'
 import { generateQiniuToken } from '@/util/qiniu.token.js'
 import qiniu from '@/config/qiniu'
+import loadCSS from '@/util/loadCSS'
 
 export default {
   name: 'Home',
@@ -159,6 +165,7 @@ export default {
 
     this.debounceDownloadPdf = debounce(this.handleDownloadPdf, 300)
     this.debounceDownloadMarkdown = debounce(this.handleDownloadMarkdown, 300)
+    this.debounceDownloadHtml = debounce(this.handleDownloadHtml, 300)
     this.debouncePositionChange = debounce(this.handlePositionChange, 10)
   },
 
@@ -334,6 +341,39 @@ export default {
       document.body.appendChild(elem)
       elem.click()
       document.body.removeChild(elem)
+    },
+    handleDownloadHtml() {
+      if (!this.codeValueValidator()) return
+
+      loadCSS(cssText => {
+        const htmlValue = `<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>  
+    html,body{ background:#f4f5f5 !important; }
+    .preview { box-sizing:border-box; max-width:800px; padding:20px 32px; margin:0 auto; background: #fff; } 
+    ${cssText}
+  </style>
+  <title>draft</title>
+</head>
+<body>
+  <div class="preview">
+  ${document.querySelector('#previewArea > div').innerHTML}
+  </div>
+</body>
+</html>`
+        const elem = document.createElement('a')
+        elem.download = 'draft.html'
+        elem.style.display = 'none'
+        const blob = new Blob([htmlValue], { type: 'text/plain' })
+        elem.href = URL.createObjectURL(blob)
+        document.body.appendChild(elem)
+        elem.click()
+        document.body.removeChild(elem)
+      })
     },
     // 文件格式的校验
     fileExtensionValidator(files) {

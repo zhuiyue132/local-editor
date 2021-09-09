@@ -1,6 +1,5 @@
 import Markdown from 'markdown-it'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/default.css'
 
 const mkd = new Markdown({
   html: true,

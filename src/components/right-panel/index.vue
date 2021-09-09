@@ -25,6 +25,12 @@
           <svg-icon icon-class="pdf" />
         </el-tooltip>
       </div>
+
+      <div class="handle-button" :style="{ top: '400px' }" @click.stop="$emit('html')">
+        <el-tooltip content="导出.html文件" placement="left">
+          <i class="el-icon-download" />
+        </el-tooltip>
+      </div>
       <div class="rightPanel-items">
         <slot />
       </div>

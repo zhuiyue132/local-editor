@@ -9,7 +9,7 @@ import router from './router'
 import store from './store'
 
 import '@/styles/index.scss'
-import '@/styles/theme.css'
+// import '@/styles/theme.css'
 import './icons' // icon
 
 import 'core-js/stable'
