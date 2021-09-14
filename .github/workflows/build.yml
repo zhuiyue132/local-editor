@@ -27,7 +27,6 @@ jobs:
           REMOTE_HOST: ${{ secrets.remote_host }}
           REMOTE_USER: ${{ secrets.remote_user }}
           TARGET: ${{ secrets.remote_target }}
-          EXCLUDE: '/dist/, /node_modules/'
       - name: deploy
         uses: crazy-max/ghaction-github-pages@v2
         with:
