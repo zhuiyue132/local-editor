@@ -21,12 +21,12 @@ jobs:
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.ssh_private_key }}
           ARGS: '-rltgoDzvO --delete'
           SOURCE: 'dist/'
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: ${{ secrets.REMOTE_TARGET }}
+          REMOTE_HOST: ${{ secrets.remote_host }}
+          REMOTE_USER: ${{ secrets.remote_user }}
+          TARGET: ${{ secrets.remote_target }}
           EXCLUDE: '/dist/, /node_modules/'
       - name: deploy
         uses: crazy-max/ghaction-github-pages@v2
