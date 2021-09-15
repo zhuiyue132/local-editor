@@ -2,12 +2,10 @@
  * @Author: chenghao
  * @Date: 2020-05-25 10:03:09
  * @Last Modified by: chenghao
- * @Last Modified time: 2020-07-06 16:20:25
+ * @Last Modified time: 2021-09-15 14:29:33
  * @Desc: vue-cli@3.x config
  */
 const path = require('path')
-
-const isProduction = process.env.NODE_ENV === 'production'
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -17,30 +15,6 @@ module.exports = {
   publicPath: '',
   productionSourceMap: false,
   assetsDir: 'static',
-  configureWebpack: config => {
-    if (isProduction) {
-      config.optimization = {
-        runtimeChunk: 'single',
-        splitChunks: {
-          chunks: 'all',
-          maxInitialRequests: Infinity,
-          minSize: 20000,
-          cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name(module) {
-                // get the name. E.g. node_modules/packageName/not/this/part.js
-                // or node_modules/packageName
-                const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
-                // npm package names are URL-safe, but some servers don't like @ symbols
-                return `npm.${packageName.replace('@', '')}`
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   chainWebpack: config => {
     config.plugin('html').tap(args => {
       const arg = args
