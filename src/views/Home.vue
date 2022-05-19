@@ -29,9 +29,9 @@
           </el-popover>
         </template>
 
-        <el-dropdown v-if="showDropdownBtn" @command="handleHeaderIconClick" style="cursor: pointer;">
+        <el-dropdown v-if="showDropdownBtn" @command="handleHeaderIconClick" style="cursor: pointer">
           <span class="el-dropdown-link">
-            <i class="el-icon-arrow-down header-icon" style="font-size: 20px; font-weight: bold;" />
+            <i class="el-icon-arrow-down header-icon" style="font-size: 20px; font-weight: bold" />
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for="icon in iconreset" :command="icon" :key="icon.iconName">
@@ -67,7 +67,7 @@
       drag
       :show-file-list="false"
       :style="{ zIndex: dragover ? 10001 : -1 }"
-      action="https://upload.qiniup.com"
+      action="https://upload-as0.qiniup.com"
       :data="uploadParams"
       ref="upload"
       class="full-screen-upload"
@@ -77,9 +77,7 @@
       :before-upload="beforeUpload"
     >
       <template v-if="dragover">
-        <div class="upload-tip">
-          将文件拖到此处，松手即可完成上传
-        </div>
+        <div class="upload-tip">将文件拖到此处，松手即可完成上传</div>
       </template>
     </el-upload>
   </div>
