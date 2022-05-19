@@ -18,6 +18,15 @@ jobs:
       - name: build
         run: npm install && npm run build
 
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.ssh_private_key }}
+          ARGS: '-rltgoDzvO --delete'
+          SOURCE: 'dist/'
+          REMOTE_HOST: ${{ secrets.remote_host }}
+          REMOTE_USER: ${{ secrets.remote_user }}
+          TARGET: ${{ secrets.remote_target }}
       - name: deploy
         uses: crazy-max/ghaction-github-pages@v2
         with:
