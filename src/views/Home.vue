@@ -68,7 +68,6 @@
       name="source"
       :show-file-list="false"
       :style="{ zIndex: dragover ? 10001 : -1 }"
-      action=""
       :data="uploadParams"
       ref="upload"
       class="full-screen-upload"
@@ -77,9 +76,7 @@
       :http-request="httpRequest"
     >
       <template v-if="dragover">
-        <div class="upload-tip">
-          将文件拖到此处，松手即可完成上传
-        </div>
+        <div class="upload-tip">将文件拖到此处，松手即可完成上传</div>
       </template>
     </el-upload>
   </div>
