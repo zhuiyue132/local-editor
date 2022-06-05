@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2020-06-18 17:42:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2021-09-06 10:12:36
+ * @Last Modified time: 2022-06-05 14:43:16
  * @Desc: 初始进入的模板配置
  */
 /* eslint-disable  */
@@ -108,23 +108,19 @@ export default `
 
 插入图片，如果是行内图片则无图例，否则有图例，格式如下：
 
-![这里写图片描述](http://img.plutos.net.cn/FlQmUE-qRPjXhHYKvOqF1q3ECKdG/z)
+![alt](https://picture.zhuiyue.vip:444/images/2022/06/05/26954775.jpg)
+
 
 支持 jpg、png、gif、svg 等图片格式，**其中 svg 文件仅可在微信公众平台中使用**，svg 文件示例如下：
 
 
 <div style="width: 200px;margin:0 auto;">
 
- ![alt](http://img.plutos.net.cn/Fri3SrK6wFXs4solFhyqEvlXU3xy)
- 
+ ![alt](https://picture.zhuiyue.vip:444/images/2022/06/05/26954775.jpg)
+
 </div>
 
-- 支持图片**拖拽**到编辑器中上传，上传到七牛云存储。
-
-**注意：** 一些特殊格式的图片，上传后需要把图片链接末尾的 /z 去掉。
-
-> /z 是七牛云中设置的图片样式，即右下角水印效果。
-
+- 支持图片**拖拽**到编辑器中上传，上传到自建图床。
 
 
 
@@ -201,9 +197,7 @@ diff 不能同时和其他语言的高亮同时显示，使用效果如下:
 
 ### 3.3 组件图床
 
-组件目前共支持 1 种图床和 1 种自定义图床，即七牛云。
-
-代码clone 后自用需要修改 src/config/qiniu.js 修改对应配置项
+组件目前共支持 1 种图床和 1 种自定义图床，即自建Chevereto图床。
 
 
 ### 3.4 更多文档

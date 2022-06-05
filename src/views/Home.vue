@@ -65,16 +65,16 @@
 
     <el-upload
       drag
+      name="source"
       :show-file-list="false"
       :style="{ zIndex: dragover ? 10001 : -1 }"
-      action="https://upload.qiniup.com"
+      action=""
       :data="uploadParams"
       ref="upload"
       class="full-screen-upload"
       :accept="accept"
-      :on-success="handleUploadSuccess"
-      :on-error="handleUploadError"
       :before-upload="beforeUpload"
+      :http-request="httpRequest"
     >
       <template v-if="dragover">
         <div class="upload-tip">
@@ -102,9 +102,8 @@ import icons from '@/config'
 import { on, off, setCode, getCode, isFirstEntry, FIRST_ENTRY_KEY } from '@/util'
 import templateCode from '@/config/template'
 import mkd from './mkd'
-import { generateQiniuToken } from '@/util/qiniu.token.js'
-import qiniu from '@/config/qiniu'
 import loadCSS from '@/util/loadCSS'
+import axios from 'axios'
 
 export default {
   name: 'Home',
@@ -127,10 +126,10 @@ export default {
       parsedHtml: null,
       dragover: false,
       accept: '.png,.jpg,.gif,.bmp,.jpeg,.webp,.svg',
+      isPreview: false,
       uploadParams: {
-        token: ''
-      },
-      isPreview: false
+        key: '1e7580cb2cefcd195f214697fefe6cb3'
+      }
     }
   },
   computed: {
@@ -161,7 +160,6 @@ export default {
     }
 
     window.localStorage.setItem(FIRST_ENTRY_KEY, 1)
-    this.uploadParams.token = generateQiniuToken()
 
     this.debounceDownloadPdf = debounce(this.handleDownloadPdf, 300)
     this.debounceDownloadMarkdown = debounce(this.handleDownloadMarkdown, 300)
@@ -198,6 +196,26 @@ export default {
   methods: {
     onView(isPreview) {
       this.isPreview = isPreview
+    },
+    httpRequest(data) {
+      console.log(data)
+      const formdata = new FormData()
+      formdata.append('source', data.file)
+      formdata.append('key', data.data.key)
+      axios({
+        method: 'post',
+        url: 'https://picture.zhuiyue.vip:444/api/1/upload',
+        headers: {
+          'Content-Type': 'multipart/form-data; charset=utf-8;'
+        },
+        data: formdata
+      })
+        .then(res => {
+          this.$refs.code.ace.insert(` ![alt](${res.data.image.image.url})`)
+        })
+        .finally(() => {
+          this.dragover = false
+        })
     },
     handleDragover() {
       if (!this.picBedStatus) return
@@ -352,9 +370,9 @@ export default {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>  
+  <style>
     html,body{ background:#f4f5f5 !important; }
-    .preview { box-sizing:border-box; max-width:800px; padding:20px 32px; margin:0 auto; background: #fff; } 
+    .preview { box-sizing:border-box; max-width:800px; padding:20px 32px; margin:0 auto; background: #fff; }
     ${cssText}
   </style>
   <title>draft</title>
@@ -406,16 +424,6 @@ export default {
         this.dragover = false
       }
       return !gtLimitSize
-    },
-    // 图片上传的响应 success/error
-    handleUploadSuccess(res) {
-      console.log('pic upload success :>> ', res)
-      this.dragover = false
-      this.uploadParams.token = generateQiniuToken()
-      this.$refs.code.ace.insert(` ![alt](${qiniu.cdnAddress}${res.key}/z)`)
-    },
-    handleUploadError() {
-      this.dragover = false
     },
     // 快捷插入辅助方法，一般是需要额外组件支持的按钮才会走到这里
     handleAssit(data = {}) {
