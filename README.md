@@ -13,9 +13,7 @@
 
 ### 🏠 [Homepage](https://github.com/zhuiyue132/markdown-editor)
 
-
-### ✨ [Demo-码云](http://zhuiyue132.gitee.io/markdown-editor)（可能没有及时更新）
-### ✨ [Demo](http://editor.plutos.net.cn/)
+### ✨ [Demo](https://editor.zhuiyue.vip:444/)（可能没有及时更新）
 
 ## Install
 
@@ -34,7 +32,7 @@ npm run build
 
 👤 **芬达**
 
-- Github: [@芬达132](https://github.com/zhuiyue132)
+- Github: [@芬达 132](https://github.com/zhuiyue132)
 
 ## Show your support
 
