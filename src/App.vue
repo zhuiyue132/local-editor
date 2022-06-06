@@ -4,15 +4,18 @@ import Header from "./components/Header.vue";
 import { ref, reactive } from "vue";
 import { storeToRefs } from "pinia";
 import useEditor from "./store/useEditor";
+import useImageUpload from './store/useImageUpload';
+import useArticleSave from './store/useSave';
 import { getPlugins } from "./config";
 
 const EditorStore = useEditor();
 const { setValue } = EditorStore;
+const { uploadImages } = useImageUpload()
+const { saveArticle } = useArticleSave()
 const {
   maxLength,
   placeholder,
   previewDebounce,
-  uploadImages,
   value = "",
   locale,
   articleTitle,
@@ -23,13 +26,19 @@ const plugins = getPlugins();
 /**
  * 保存按钮点击；
  */
-const onSaveClick = () => {};
+const onSaveClick = saveArticle;
 
 const onSettingClick = () => {};
+
+const onEditClick = () => {}
+
+const onExportClick = (type) => {
+
+}
 </script>
 
 <template>
-  <Header @save="onSaveClick" @setting="onSettingClick" />
+  <Header @save="onSaveClick" @setting="onSettingClick" @edit="onEditClick" @export="onExportClick" />
   <div id="app-content" class="markdown-body">
     <Editor
       :plugins="plugins"
@@ -39,6 +48,7 @@ const onSettingClick = () => {};
       :preview-debounce="previewDebounce"
       :placeholder="placeholder"
       :max-length="maxLength"
+      :uploadImages="uploadImages"
       class="mkd-editor"
       @change="setValue"
     />

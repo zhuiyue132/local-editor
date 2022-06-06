@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-05 16:27:47
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-05 23:52:20
+ * @Last Modified time: 2022-06-06 23:11:55
  */
 import { defineStore } from "pinia";
 import { locale } from "../config";
@@ -14,12 +14,15 @@ export default defineStore("editor", {
     value: "",
     articleTitle: "",
     locale,
+    articleList: []
   }),
 
   actions: {
+    // 设置编辑器内容;
     setValue(v) {
       this.value = v;
     },
+    // 设置文章标题
     setTitle(v) {
       this.articleTitle = v;
     },

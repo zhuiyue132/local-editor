@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-05 16:21:10
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-05 22:29:55
+ * @Last Modified time: 2022-06-06 22:54:31
  */
 
 import breaks from "@bytemd/plugin-breaks";
@@ -29,3 +29,6 @@ export const locale = zhHans;
 export const REPO_URL = `https://github.com/zhuiyue132/markdown-editor`;
 
 export const REPO_NAME = `markdown-editor`;
+
+export const CHEVERETO_KEY = `1e7580cb2cefcd195f214697fefe6cb3`
+export const CHEVERETO_URL = `https://picture.zhuiyue.vip:444/api/1/upload`;

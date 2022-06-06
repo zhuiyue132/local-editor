@@ -3,13 +3,16 @@ import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import useEditor from "../store/useEditor";
 import ArticleList from "./ArticleList.vue";
+import Icon from "../components/Icon.vue";
 
-const emit = defineEmits(["save", "setting"]);
+const emit = defineEmits(["save", "setting", "edit", 'export']);
 
 const state = useEditor();
 const { setTitle } = state;
 const { articleTitle } = storeToRefs(state);
 watch(articleTitle, setTitle);
+
+const onDropdownCommand = (command) => emit('export', command)
 </script>
 
 <template>
@@ -20,11 +23,20 @@ watch(articleTitle, setTitle);
       class="title"
     />
     <div class="right">
-      <el-dropdown style="margin-right: 8px">
-        <el-button type="text" @click.stop="emit('save')">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-A40"></use>
-          </svg>
+      <!-- 历史记录 -->
+      <el-dropdown class="gap">
+        <el-button text >
+          <Icon href="A3" />
+        </el-button>
+        <template #dropdown>
+          <ArticleList />
+        </template>
+      </el-dropdown>
+
+      <!-- 下载 -->
+      <el-dropdown class="gap" @command="onDropdownCommand">
+        <el-button text >
+          <Icon href="A40" />
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
@@ -36,27 +48,14 @@ watch(articleTitle, setTitle);
         </template>
       </el-dropdown>
 
-      <el-dropdown style="margin-right: 8px">
-        <el-button type="text" @click.stop="emit('save')">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-A3"></use>
-          </svg>
-        </el-button>
-        <template #dropdown>
-          <ArticleList />
-        </template>
-      </el-dropdown>
-
-      <el-button type="text" @click.stop="emit('save')">
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-A27"></use>
-        </svg>
+      <!-- 保存 -->
+      <el-button class="gap"  text @click.stop="emit('save')">
+        <Icon href="A27" />
       </el-button>
 
-      <el-button type="text" @click.stop="emit('setting')">
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-A96"></use>
-        </svg>
+      <!-- 设置 -->
+      <el-button class="gap" text @click.stop="emit('setting')">
+        <Icon href="A96" />
       </el-button>
     </div>
   </header>
@@ -86,6 +85,9 @@ watch(articleTitle, setTitle);
     display: flex;
     align-items: center;
     justify-content: end;
+    .gap {
+      margin-left: 0;
+    }
   }
 }
 </style>
