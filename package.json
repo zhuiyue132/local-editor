@@ -1,0 +1,37 @@
+{
+  "name": "mkdeditor-next",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@bytemd/plugin-breaks": "^1.15.0",
+    "@bytemd/plugin-footnotes": "^1.12.4",
+    "@bytemd/plugin-frontmatter": "^1.15.0",
+    "@bytemd/plugin-gemoji": "^1.15.0",
+    "@bytemd/plugin-gfm": "^1.15.0",
+    "@bytemd/plugin-highlight": "^1.15.0",
+    "@bytemd/plugin-medium-zoom": "^1.15.0",
+    "@bytemd/vue-next": "^1.15.0",
+    "axios": "^0.27.2",
+    "bytemd": "^1.15.0",
+    "element-plus": "^2.2.4",
+    "github-markdown-css": "^5.1.0",
+    "html2canvas": "^1.4.1",
+    "normalize.css": "^8.0.1",
+    "pinia": "^2.0.14",
+    "pinia-persistedstate-plugin": "^0.1.0",
+    "vue": "^3.2.25"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.3.3",
+    "less": "^4.1.2",
+    "less-loader": "^11.0.0",
+    "unplugin-auto-import": "^0.8.6",
+    "unplugin-vue-components": "^0.19.6",
+    "vite": "^2.9.9"
+  }
+}
