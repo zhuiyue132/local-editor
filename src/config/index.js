@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-05 16:21:10
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-06 22:54:31
+ * @Last Modified time: 2022-06-08 23:25:02
  */
 
 import breaks from "@bytemd/plugin-breaks";
@@ -12,16 +12,32 @@ import frontmatter from "@bytemd/plugin-frontmatter";
 import gfm from "@bytemd/plugin-gfm";
 import mediumZoom from "@bytemd/plugin-medium-zoom";
 import gemoji from "@bytemd/plugin-gemoji";
-import zhHans from "bytemd/lib/locales/zh_Hans.json";
+import mermaid from '@bytemd/plugin-mermaid';
+import zhHans from "bytemd/locales/zh_Hans.json";
+import gfm_zh from '@bytemd/plugin-gfm/locales/zh_Hans.json';
+import mermaid_zh from '@bytemd/plugin-mermaid/locales/zh_Hans.json';
+import math from '@bytemd/plugin-math'
+import math_zh from '@bytemd/plugin-math/locales/zh_Hans.json';
+
+
 
 export const getPlugins = () => [
   breaks(),
   highlight(),
   footnotes(),
   frontmatter(),
-  gfm(),
+  gfm({
+    locale: gfm_zh,
+  }),
   mediumZoom(),
   gemoji(),
+  math({
+    locale: math_zh,
+    katexOptions: { output: 'html' },
+  }),
+  mermaid({
+    locale: mermaid_zh,
+  })
 ];
 
 export const locale = zhHans;

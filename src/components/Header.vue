@@ -1,9 +1,9 @@
 <script setup>
 import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-import useEditor from "../store/useEditor";
-import ArticleList from "./ArticleList.vue";
-import Icon from "../components/Icon.vue";
+import useEditor from "@/store/useEditor";
+import ArticleList from "@/components/ArticleList.vue";
+import Icon from "@/components/Icon.vue";
 
 const emit = defineEmits(["save", "setting", "edit", 'export']);
 

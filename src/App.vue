@@ -1,12 +1,12 @@
 <script setup>
 import { Editor } from "@bytemd/vue-next";
-import Header from "./components/Header.vue";
+import Header from "@/components/Header.vue";
 import { ref, reactive } from "vue";
 import { storeToRefs } from "pinia";
-import useEditor from "./store/useEditor";
-import useImageUpload from './store/useImageUpload';
-import useArticleSave from './store/useSave';
-import { getPlugins } from "./config";
+import useEditor from "@/store/useEditor";
+import useImageUpload from '@/hooks/useImageUpload';
+import useArticleSave from '@/hooks/useSave';
+import { getPlugins } from "@/config";
 
 const EditorStore = useEditor();
 const { setValue } = EditorStore;
