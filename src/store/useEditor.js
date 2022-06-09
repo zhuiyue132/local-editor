@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-05 16:27:47
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-06 23:11:55
+ * @Last Modified time: 2022-06-09 13:01:07
  */
 import { defineStore } from "pinia";
 import { locale } from "../config";
@@ -14,7 +14,7 @@ export default defineStore("editor", {
     value: "",
     articleTitle: "",
     locale,
-    articleList: []
+    articleList: [],
   }),
 
   actions: {

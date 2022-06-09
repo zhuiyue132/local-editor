@@ -20,6 +20,7 @@
     "@bytemd/vue-next": "^1.15.0",
     "axios": "^0.27.2",
     "bytemd": "^1.15.0",
+    "dayjs": "^1.11.3",
     "element-plus": "^2.2.4",
     "github-markdown-css": "^5.1.0",
     "highlight.js": "^11.5.1",
