@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-06 22:37:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-09 13:03:51
+ * @Last Modified time: 2022-06-09 19:00:01
  */
 import { storeToRefs } from "pinia";
 import useEditor from "../store/useEditor";
@@ -26,13 +26,20 @@ export default function useArticleSave() {
       return ElMessage.error("Oops, 你是不是忘了输入文章内容啊？");
     }
     const acticleNames = articleList.value.map(({ name }) => name);
+    const articleCreateTimes = articleList.value.map(
+      ({ createTime }) => createTime
+    );
+    if (articleCreateTimes.includes(dayjs().format("YYYY-MM-DD HH:mm"))) {
+      // 每分钟限制保存一次；
+      return ElMessage.warning("Too Fast to Save。每分钟只能保存一次哦！");
+    }
     articleList.value.push({
       name: title,
       content: articleContent,
       createTime: dayjs().format("YYYY-MM-DD HH:mm"),
     });
 
-    ElMessage.success("Yes, 保存成功,请到版本记录中去查看");
+    ElMessage.success("Oh Yes, 保存成功!");
   };
 
   return {
