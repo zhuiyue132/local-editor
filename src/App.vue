@@ -1,17 +1,18 @@
 <script setup>
 import { Editor } from "@bytemd/vue-next";
 import Header from "@/components/Header.vue";
+import ArticleList from "@/components/ArticleList.vue";
 import { ref, reactive } from "vue";
 import { storeToRefs } from "pinia";
 import useEditor from "@/store/useEditor";
-import useImageUpload from '@/hooks/useImageUpload';
-import useArticleSave from '@/hooks/useSave';
+import useImageUpload from "@/hooks/useImageUpload";
+import useArticleSave from "@/hooks/useSave";
 import { getPlugins } from "@/config";
 
 const EditorStore = useEditor();
 const { setValue } = EditorStore;
-const { uploadImages } = useImageUpload()
-const { saveArticle } = useArticleSave()
+const { uploadImages } = useImageUpload();
+const { saveArticle } = useArticleSave();
 const {
   maxLength,
   placeholder,
@@ -19,6 +20,7 @@ const {
   value = "",
   locale,
   articleTitle,
+  articleList,
 } = storeToRefs(EditorStore);
 // 如果plugins也放在store内部的话，会引起第二次加载plugins失败，导致toolbar点击失效;
 const plugins = getPlugins();
@@ -30,15 +32,21 @@ const onSaveClick = saveArticle;
 
 const onSettingClick = () => {};
 
-const onEditClick = () => {}
+const onEditClick = () => {};
 
-const onExportClick = (type) => {
+const onExportClick = (type) => {};
 
-}
+const dialogVisible = ref(false);
 </script>
 
 <template>
-  <Header @save="onSaveClick" @setting="onSettingClick" @edit="onEditClick" @export="onExportClick" />
+  <ArticleList v-if="dialogVisible" :data="articleList" @close="dialogVisible = false" />
+  <Header
+    @save="onSaveClick"
+    @setting="onSettingClick"
+    @open-list="dialogVisible = true"
+    @export="onExportClick"
+  />
   <div id="app-content" class="markdown-body">
     <Editor
       :plugins="plugins"

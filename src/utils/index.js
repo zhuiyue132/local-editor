@@ -1,8 +1,8 @@
 /*
  * @Author: chenghao
  * @Date: 2022-06-05 15:36:35
- * @Last Modified by:   chenghao
- * @Last Modified time: 2022-06-05 15:36:35
+ * @Last Modified by: chenghao
+ * @Last Modified time: 2022-06-10 00:19:49
  */
 
 /**
@@ -40,3 +40,21 @@ export const on = (function () {
     }
   };
 })();
+
+/**
+ * 把数组切成指定长度的二位数组，默认为1；
+ * @param {*} [arr=[]]
+ * @param {number} [num=1]
+ * @returns
+ */
+export const chunk = (arr = [], num = 1) => {
+  num = num * 1;
+  var ret = [];
+  arr.forEach(function (item, i) {
+    if (i % num === 0) {
+      ret.push([]);
+    }
+    ret[ret.length - 1].push(item);
+  });
+  return ret;
+}

@@ -16,15 +16,9 @@ const store = createPinia();
 
 store.use(createPersistedStatePlugin({
   storage: {
-    getItem: async (key) => {
-      return localforage.getItem(key)
-    },
-    setItem: async (key, value) => {
-      return localforage.setItem(key, value)
-    },
-    removeItem: async (key) => {
-      return localforage.removeItem(key)
-    },
+    getItem: (key) => localforage.getItem(key),
+    setItem: (key, value) => localforage.setItem(key, value),
+    removeItem: (key) => localforage.removeItem(key),
   },
 }));
 

@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-06 22:37:01
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-09 19:00:01
+ * @Last Modified time: 2022-06-09 21:36:22
  */
 import { storeToRefs } from "pinia";
 import useEditor from "../store/useEditor";
@@ -31,7 +31,7 @@ export default function useArticleSave() {
     );
     if (articleCreateTimes.includes(dayjs().format("YYYY-MM-DD HH:mm"))) {
       // 每分钟限制保存一次；
-      return ElMessage.warning("Too Fast to Save。每分钟只能保存一次哦！");
+      return ElMessage.warning("A Ha ? 每分钟只能保存一次哦！");
     }
     articleList.value.push({
       name: title,

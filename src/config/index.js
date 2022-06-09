@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-05 16:21:10
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-08 23:25:02
+ * @Last Modified time: 2022-06-09 21:36:47
  */
 
 import breaks from "@bytemd/plugin-breaks";
@@ -48,3 +48,9 @@ export const REPO_NAME = `markdown-editor`;
 
 export const CHEVERETO_KEY = `1e7580cb2cefcd195f214697fefe6cb3`
 export const CHEVERETO_URL = `https://picture.zhuiyue.vip:444/api/1/upload`;
+
+
+export const articleColumns = [{
+  label: `文章标题`,
+  
+}]

@@ -5,14 +5,14 @@ import useEditor from "@/store/useEditor";
 import ArticleList from "@/components/ArticleList.vue";
 import Icon from "@/components/Icon.vue";
 
-const emit = defineEmits(["save", "setting", "edit", 'export']);
+const emit = defineEmits(["save", "setting", "openList", "export"]);
 
 const state = useEditor();
 const { setTitle } = state;
-const { articleTitle } = storeToRefs(state);
+const { articleTitle, articleList } = storeToRefs(state);
 watch(articleTitle, setTitle);
 
-const onDropdownCommand = (command) => emit('export', command)
+const onDropdownCommand = (command) => emit("export", command);
 </script>
 
 <template>
@@ -20,22 +20,18 @@ const onDropdownCommand = (command) => emit('export', command)
     <el-input
       v-model="articleTitle"
       placeholder="输入文章标题..."
+      maxlength="25"
       class="title"
     />
     <div class="right">
       <!-- 历史记录 -->
-      <el-dropdown class="gap">
-        <el-button text >
-          <Icon href="A3" />
-        </el-button>
-        <template #dropdown>
-          <ArticleList />
-        </template>
-      </el-dropdown>
+      <el-button text class="gap" @click.stop="emit('openList')">
+        <Icon href="A3" />
+      </el-button>
 
       <!-- 下载 -->
       <el-dropdown class="gap" @command="onDropdownCommand">
-        <el-button text >
+        <el-button text>
           <Icon href="A40" />
         </el-button>
         <template #dropdown>
@@ -49,7 +45,7 @@ const onDropdownCommand = (command) => emit('export', command)
       </el-dropdown>
 
       <!-- 保存 -->
-      <el-button class="gap"  text @click.stop="emit('save')">
+      <el-button class="gap" text @click.stop="emit('save')">
         <Icon href="A27" />
       </el-button>
 
