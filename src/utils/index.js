@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-05 15:36:35
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-10 00:19:49
+ * @Last Modified time: 2022-06-12 22:47:27
  */
 
 /**
@@ -57,4 +57,8 @@ export const chunk = (arr = [], num = 1) => {
     ret[ret.length - 1].push(item);
   });
   return ret;
+}
+
+export function getRandomCode() {
+  return Math.random().toString(32).slice(2);
 }

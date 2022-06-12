@@ -2,16 +2,15 @@
  * @Author: chenghao 
  * @Date: 2022-06-10 00:15:39 
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-10 00:24:04
+ * @Last Modified time: 2022-06-12 23:07:28
  */
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { chunk } from '@/utils';
 
-export default function usePagnation (list) {
-
-  const pageSize = ref(10);
+export default function usePagination (list) {
+  const pageSize = ref(5);
   const page = ref(1);
-  const total = ref(list.length);
+  const total = computed(() => list.value.length);
   const paging = ref(chunk(list.value, pageSize.value));
   const current = ref(paging.value[0])
 
@@ -20,6 +19,13 @@ export default function usePagnation (list) {
   };
 
   watch(page, onCurrentChange);
+
+  watch(list, () => {
+    page.value = 1;
+    paging.value = chunk(list.value, pageSize.value);
+    total.value = list.value.length;
+    onCurrentChange()
+  })
 
   return {
     current, total, page, pageSize, onCurrentChange

@@ -2,7 +2,7 @@
 import { Editor } from "@bytemd/vue-next";
 import Header from "@/components/Header.vue";
 import ArticleList from "@/components/ArticleList.vue";
-import { ref, reactive } from "vue";
+import { ref, reactive, computed } from "vue";
 import { storeToRefs } from "pinia";
 import useEditor from "@/store/useEditor";
 import useImageUpload from "@/hooks/useImageUpload";
@@ -25,6 +25,17 @@ const {
 // 如果plugins也放在store内部的话，会引起第二次加载plugins失败，导致toolbar点击失效;
 const plugins = getPlugins();
 
+console.log(articleList);
+
+const searchKey = ref("");
+const articleListAfterSearch = computed(() => {
+  const search = searchKey.value;
+  if(!search) return articleList.value;
+  return articleList.value.filter((item) =>
+    item.name.includes(search)
+  );
+});
+
 /**
  * 保存按钮点击；
  */
@@ -32,7 +43,13 @@ const onSaveClick = saveArticle;
 
 const onSettingClick = () => {};
 
-const onEditClick = () => {};
+
+// 编辑按钮点击；
+const onEditClick = (row) => {
+  value.value = row.content;
+  articleTitle.value = row.name;
+  dialogVisible.value = false;
+};
 
 const onExportClick = (type) => {};
 
@@ -40,7 +57,14 @@ const dialogVisible = ref(false);
 </script>
 
 <template>
-  <ArticleList v-if="dialogVisible" :data="articleList" @close="dialogVisible = false" />
+  <ArticleList
+    v-if="dialogVisible"
+    :data="articleListAfterSearch"
+    :keyword="searchKey"
+    @close="dialogVisible = false"
+    @recover="onEditClick"
+    @search="val => searchKey = val"
+  />
   <Header
     @save="onSaveClick"
     @setting="onSettingClick"
@@ -51,7 +75,7 @@ const dialogVisible = ref(false);
     <Editor
       :plugins="plugins"
       :locale="locale"
-      :value="value"
+      v-model:value="value"
       :upload-images="uploadImages"
       :preview-debounce="previewDebounce"
       :placeholder="placeholder"
