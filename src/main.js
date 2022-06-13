@@ -9,6 +9,7 @@ import "github-markdown-css/github-markdown-light.css";
 import 'highlight.js/styles/vs.css'
 import 'katex/dist/katex.css'
 import "./styles/style.less";
+import "element-plus/es/components/message/style/css";
 
 
 const app = createApp(App);

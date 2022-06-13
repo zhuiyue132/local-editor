@@ -7,12 +7,14 @@ import { storeToRefs } from "pinia";
 import useEditor from "@/store/useEditor";
 import useImageUpload from "@/hooks/useImageUpload";
 import useArticleSave from "@/hooks/useSave";
+import useExport from "@/hooks/useExport.js";
 import { getPlugins } from "@/config";
 
 const EditorStore = useEditor();
 const { setValue } = EditorStore;
 const { uploadImages } = useImageUpload();
 const { saveArticle } = useArticleSave();
+
 const {
   maxLength,
   placeholder,
@@ -25,15 +27,13 @@ const {
 // 如果plugins也放在store内部的话，会引起第二次加载plugins失败，导致toolbar点击失效;
 const plugins = getPlugins();
 
-console.log(articleList);
+const { exportHTML } = useExport({ articleTitle, articleContent: value });
 
 const searchKey = ref("");
 const articleListAfterSearch = computed(() => {
   const search = searchKey.value;
-  if(!search) return articleList.value;
-  return articleList.value.filter((item) =>
-    item.name.includes(search)
-  );
+  if (!search) return articleList.value;
+  return articleList.value.filter((item) => item.name.includes(search));
 });
 
 /**
@@ -43,7 +43,6 @@ const onSaveClick = saveArticle;
 
 const onSettingClick = () => {};
 
-
 // 编辑按钮点击；
 const onEditClick = (row) => {
   value.value = row.content;
@@ -51,7 +50,15 @@ const onEditClick = (row) => {
   dialogVisible.value = false;
 };
 
-const onExportClick = (type) => {};
+const onExportClick = (type) => {
+  switch (type) {
+    case "html":
+      exportHTML();
+      break;
+    default:
+      break;
+  }
+};
 
 const dialogVisible = ref(false);
 </script>
@@ -63,7 +70,7 @@ const dialogVisible = ref(false);
     :keyword="searchKey"
     @close="dialogVisible = false"
     @recover="onEditClick"
-    @search="val => searchKey = val"
+    @search="(val) => (searchKey = val)"
   />
   <Header
     @save="onSaveClick"
