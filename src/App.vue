@@ -27,7 +27,7 @@ const {
 // 如果plugins也放在store内部的话，会引起第二次加载plugins失败，导致toolbar点击失效;
 const plugins = getPlugins();
 
-const { exportHTML } = useExport({ articleTitle, articleContent: value });
+const { exportHTML, exportMarkdown, exportImage } = useExport({ articleTitle, articleContent: value });
 
 const searchKey = ref("");
 const articleListAfterSearch = computed(() => {
@@ -54,6 +54,12 @@ const onExportClick = (type) => {
   switch (type) {
     case "html":
       exportHTML();
+      break;
+    case "markdown":
+      exportMarkdown();
+      break;
+    case "image":
+      exportImage();
       break;
     default:
       break;

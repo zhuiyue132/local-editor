@@ -5,7 +5,7 @@ import { createPersistedStatePlugin } from "pinia-plugin-persistedstate-2";
 import localforage from 'localforage';
 import "normalize.css/normalize.css";
 import "bytemd/dist/index.css";
-import "github-markdown-css/github-markdown-light.css";
+import "github-markdown-css/github-markdown.css";
 import 'highlight.js/styles/vs.css'
 import 'katex/dist/katex.css'
 import "./styles/style.less";

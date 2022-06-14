@@ -2,17 +2,20 @@
  * @Author: chenghao 
  * @Date: 2022-06-13 23:26:52 
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-14 00:31:19
+ * @Last Modified time: 2022-06-15 00:04:53
  * @Desc: 文件导出;
  */
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { ElMessage } from "element-plus";
 import githubCssRaw from 'github-markdown-css/github-markdown-light.css?raw';
 import HTMLTemplate from '@/config/template.html?raw';
+import html2canvas from 'html2canvas';
 
 export default function useExport ({ articleTitle, articleList, articleContent }) {
 
   const articleTitleDefault = `未命名`;
+
+  const fileName = computed(() => articleTitle.value ?? articleTitleDefault);
 
   // 校验下可以导出吗；
   const exportValidator = () => {
@@ -38,7 +41,6 @@ export default function useExport ({ articleTitle, articleList, articleContent }
     elem.download = fileName;
     elem.style.display = 'none';
     // const blob = new Blob([this.$refs.code.getValue()], { type: 'text/plain' });
-    // const blob = new Blob([htmlValue], { type: 'text/plain' })
     elem.href = URL.createObjectURL(fileContent)
     document.body.appendChild(elem)
     elem.click()
@@ -46,17 +48,44 @@ export default function useExport ({ articleTitle, articleList, articleContent }
   }
 
 
-
-
+  /**
+   * 导出html文件；
+   * @returns 
+   */
   const exportHTML = () => {
     if (!exportValidator()) return;
-    const fileName = `${articleTitle.value || articleTitleDefault}.html`;
     const fileContent = new Blob([HTMLTemplate.replace('<!-- <title></title> -->', `<title>${articleTitle.value || articleTitleDefault}</title>`).replace('<!-- <style></style> -->', `<style>${githubCssRaw}</style>`).replace(`<!-- <main></main> -->`, document.querySelector('.bytemd-preview > .markdown-body').innerHTML)], { type: 'text/plain' })
-    fileDownload(fileName, fileContent);
+    fileDownload(fileName.value + '.html', fileContent);
   };
-  const exportMarkdown = () => { };
-  const exportPDF = () => { };
-  const exportImage = () => { };
+
+  /**
+   * 导出原格式文件；
+   * @returns 
+   */
+  const exportMarkdown = () => {
+    if (!exportValidator()) return;
+    const fileContent = new Blob([articleContent.value], { type: 'text/plain' })
+    fileDownload(fileName + '.md', fileContent);
+  };
+
+
+  const exportPDF = () => {
+    if (!exportValidator()) return;
+  };
+
+  /**
+   * 
+   * @returns 导出图片；
+   */
+  const exportImage = async () => {
+    if (!exportValidator()) return;
+    const canvas = await html2canvas(document.querySelector('.bytemd-preview > .markdown-body'), {
+      scale: window.devicePixelRatio, useCORS: true, logging: false,
+      backgroundColor: '#fff', allowTaint: false
+    });
+
+    console.log(canvas);
+  };
 
   return {
     exportHTML,
