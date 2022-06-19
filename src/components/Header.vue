@@ -1,28 +1,23 @@
 <script setup>
-import { ref, watch } from "vue";
-import { storeToRefs } from "pinia";
-import useEditor from "@/store/useEditor";
-import ArticleList from "@/components/ArticleList.vue";
-import Icon from "@/components/Icon.vue";
+  import { ref, watch } from 'vue';
+  import { storeToRefs } from 'pinia';
+  import useEditor from '@/store/useEditor';
+  import ArticleList from '@/components/ArticleList.vue';
+  import Icon from '@/components/Icon.vue';
 
-const emit = defineEmits(["save", "setting", "openList", "export"]);
+  const emit = defineEmits(['save', 'setting', 'openList', 'export']);
 
-const state = useEditor();
-const { setTitle } = state;
-const { articleTitle, articleList } = storeToRefs(state);
-watch(articleTitle, setTitle);
+  const state = useEditor();
+  const { setTitle } = state;
+  const { articleTitle, articleList } = storeToRefs(state);
+  watch(articleTitle, setTitle);
 
-const onDropdownCommand = (command) => emit("export", command);
+  const onDropdownCommand = command => emit('export', command);
 </script>
 
 <template>
   <header class="page-header">
-    <el-input
-      v-model="articleTitle"
-      placeholder="输入文章标题..."
-      maxlength="25"
-      class="title"
-    />
+    <el-input v-model="articleTitle" placeholder="输入文章标题..." maxlength="25" class="title" />
     <div class="right">
       <!-- 历史记录 -->
       <el-button text class="gap" @click.stop="emit('openList')">
@@ -58,32 +53,32 @@ const onDropdownCommand = (command) => emit("export", command);
 </template>
 
 <style lang="less" scoped>
-.page-header {
-  width: 100vw;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  .title {
-    height: 40px;
-    width: 420px;
-    flex: 0 0 420px;
-    font-size: 18px;
-    --el-input-border-color: transparent;
-    --el-input-transparent-border: none;
-    --el-input-border-radius: 0;
-    --el-input-hover-border-color: transparent;
-    --el-input-focus-border-color: transparent;
-  }
-  .right {
-    flex: 1;
-    height: 40px;
+  .page-header {
+    width: 100vw;
+    height: 60px;
     display: flex;
     align-items: center;
-    justify-content: end;
-    .gap {
-      margin-left: 0;
+    padding: 0 16px;
+    .title {
+      height: 40px;
+      width: 420px;
+      flex: 0 0 420px;
+      font-size: 18px;
+      --el-input-border-color: transparent;
+      --el-input-transparent-border: none;
+      --el-input-border-radius: 0;
+      --el-input-hover-border-color: transparent;
+      --el-input-focus-border-color: transparent;
+    }
+    .right {
+      flex: 1;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      .gap {
+        margin-left: 0;
+      }
     }
   }
-}
 </style>

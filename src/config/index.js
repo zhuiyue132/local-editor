@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-05 16:21:10
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-09 21:36:47
+ * @Last Modified time: 2022-06-19 00:11:31
  */
 
 import breaks from "@bytemd/plugin-breaks";
@@ -52,5 +52,5 @@ export const CHEVERETO_URL = `https://picture.zhuiyue.vip:444/api/1/upload`;
 
 export const articleColumns = [{
   label: `文章标题`,
-  
+
 }]

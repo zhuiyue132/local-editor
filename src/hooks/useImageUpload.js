@@ -2,12 +2,12 @@
  * @Author: chenghao
  * @Date: 2022-06-06 22:45:28
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-09 12:58:27
+ * @Last Modified time: 2022-06-19 00:11:14
  */
 import axios from "axios";
 import { CHEVERETO_KEY, CHEVERETO_URL } from "../config";
 
-export default function useImageUpload() {
+export default function useImageUpload () {
   const uploadImages = async (files) => {
     const urls = await Promise.all(
       files

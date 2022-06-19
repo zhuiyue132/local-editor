@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix"
   },
   "dependencies": {
     "@bytemd/plugin-breaks": "^1.15.0",
@@ -25,6 +26,7 @@
     "github-markdown-css": "^5.1.0",
     "highlight.js": "^11.5.1",
     "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "katex": "^0.16.0",
     "localforage": "^1.10.0",
     "normalize.css": "^8.0.1",
@@ -35,6 +37,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
+    "eslint": "^8.18.0",
+    "eslint-plugin-vue": "^9.1.1",
     "less": "^4.1.2",
     "less-loader": "^11.0.0",
     "unplugin-auto-import": "^0.8.6",

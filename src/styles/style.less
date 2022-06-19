@@ -2,6 +2,16 @@
   max-width: unset !important;
   margin: unset !important;
 }
+.medium-zoom-overlay {
+  z-index: 9;
+  width: 100vw;
+  height: 100vh;
+  min-width: 400px;
+  min-height: 400px;
+  & + img {
+    z-index: 10;
+  }
+}
 
 * {
   box-sizing: border-box !important;
@@ -15,11 +25,35 @@
   overflow: hidden;
 }
 
+#app-content {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: calc(100vh - 60px);
+  .mkd-editor {
+    height: 100%;
+    > .bytemd {
+      height: 100%;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      .bytemd-toolbar-right [bytemd-tippy-path='5'] {
+        display: none;
+      }
+    }
+  }
+}
+
+.markdown-body {
+  box-sizing: border-box;
+  margin: 0 auto;
+}
 
 /* 滚动条 */
-::-webkit-scrollbar-thumb:horizontal { /*水平滚动条的样式*/
+::-webkit-scrollbar-thumb:horizontal {
+  /*水平滚动条的样式*/
   width: 4px;
-  background-color: #CCCCCC;
+  background-color: #cccccc;
   border-radius: 6px;
   -webkit-border-radius: 6px;
 }
@@ -32,7 +66,8 @@
   width: 10px; /*滚动条的宽度*/
   height: 8px; /*滚动条的高度*/
 }
-::-webkit-scrollbar-thumb:vertical { /*垂直滚动条的样式*/
+::-webkit-scrollbar-thumb:vertical {
+  /*垂直滚动条的样式*/
   height: 50px;
   background-color: #999;
   border-radius: 4px;
@@ -41,9 +76,42 @@
   outline-offset: -2px;
   border: 2px solid #fff;
 }
-::-webkit-scrollbar-thumb:hover { /*滚动条的hover样式*/
+::-webkit-scrollbar-thumb:hover {
+  /*滚动条的hover样式*/
   height: 50px;
   background-color: #9f9f9f;
   border-radius: 4px;
   -webkit-border-radius: 4px;
+}
+
+.el-loading-spinner {
+  /*这个是自己想设置的 gif 加载动图*/
+  background: url('@/assets/images/export.webp') no-repeat center center / 400px 400px;
+  height: 400px;
+  width: 100%;
+  background-position: center;
+  /*覆盖 element-ui  默认的 50%    因为此处设置了height:100%,所以不设置的话，会只显示一半，因为被top顶下去了*/
+  top: 20% !important;
+}
+.el-loading-spinner .circular {
+  /*隐藏 之前  element-ui  默认的 loading 动画*/
+  display: none !important;
+}
+
+.el-loading-spinner .el-loading-text {
+  /*为了使得文字在loading图下面*/
+  margin: 436px 0px !important;
+  color: #8c8c8c !important;
+  font-size: 24px !important;
+}
+
+.bytemd-status-right {
+  display: flex;
+  label {
+    display: flex;
+    align-items: center;
+    input {
+      margin-right: 4px;
+    }
+  }
 }

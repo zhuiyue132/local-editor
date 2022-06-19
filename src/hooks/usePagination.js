@@ -2,7 +2,7 @@
  * @Author: chenghao 
  * @Date: 2022-06-10 00:15:39 
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-12 23:07:28
+ * @Last Modified time: 2022-06-18 23:48:09
  */
 import { ref, watch, computed } from 'vue';
 import { chunk } from '@/utils';
@@ -30,5 +30,4 @@ export default function usePagination (list) {
   return {
     current, total, page, pageSize, onCurrentChange
   }
-
 }
