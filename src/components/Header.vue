@@ -61,8 +61,9 @@
     padding: 0 16px;
     .title {
       height: 40px;
-      width: 420px;
-      flex: 0 0 420px;
+      flex: 1;
+      // width: 420px;
+      // flex: 0 0 420px;
       font-size: 18px;
       --el-input-border-color: transparent;
       --el-input-transparent-border: none;
@@ -71,7 +72,7 @@
       --el-input-focus-border-color: transparent;
     }
     .right {
-      flex: 1;
+      flex: 0 0 232px;
       height: 40px;
       display: flex;
       align-items: center;

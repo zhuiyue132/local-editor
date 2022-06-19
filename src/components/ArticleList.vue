@@ -4,26 +4,24 @@
   import usePagination from '@/hooks/usePagination.js';
   import { ElMessageBox } from 'element-plus';
   import 'element-plus/es/components/message-box/style/css';
+  import useEditor from '@/store/useEditor';
+  import { storeToRefs } from 'pinia';
 
-  const props = defineProps({
-    data: {
-      type: Array,
-      default: () => []
-    },
-    keyword: {
-      type: String,
-      default: ''
-    }
-  });
-  const { data } = toRefs(props);
+  const { articleList } = storeToRefs(useEditor());
 
-  const emit = defineEmits(['close', 'recover', 'delete', 'search']);
+  const emit = defineEmits(['close', 'recover']);
   const onBeforeClose = done => {
     emit('close');
-    done();
+    done?.();
   };
   const searchKey = ref('');
-  const { current, total, page, onCurrentChange, pageSize } = usePagination(data);
+
+  const articleListAfterSearch = computed(() => {
+    const search = searchKey.value;
+    if (!search) return articleList.value;
+    return articleList.value.filter(item => item.name.includes(search));
+  });
+  const { current, total, page, onCurrentChange, pageSize } = usePagination(articleListAfterSearch);
 
   // 编辑按钮点击；
   const onRecovery = row => {
@@ -36,16 +34,13 @@
     });
   };
 
-  // 搜索按钮点击;
-  const onSearchClick = () => {
-    emit('search', searchKey.value);
-  };
-
   // 删除点击事件
-  const handleDelBtnClick = row => {};
-
-  // 批量删除点击
-  const handleBatchDelBtnClick = () => {};
+  const onDelete = rows => {
+    rows.forEach(row => {
+      const index = articleList.value.findIndex(item => item.name === row.name && item.createTime === row.createTime);
+      articleList.value.splice(index, 1);
+    });
+  };
 </script>
 <template>
   <el-dialog
@@ -56,26 +51,32 @@
     destroy-on-close
     model-value
   >
-    <div v-if="data.length || keyword" class="search_wrapper">
+    <div v-if="articleList.length" class="search_wrapper">
       <el-input v-model="searchKey" placeholder="输入文章标题搜索" maxlength="25" clearable />
 
-      <el-button type="primary" style="margin-left: 16px" @click="onSearchClick">搜索</el-button>
-      <el-button type="danger" style="margin-left: 16px">删除所选</el-button>
+      <!-- <el-button type="primary" style="margin-left: 16px" @click="onSearchClick">搜索</el-button> -->
+      <!-- <el-button type="danger" style="margin-left: 16px">删除所选</el-button> -->
     </div>
     <el-table :data="current" :show-header="false" stripe>
-      <el-table-column type="selection" />
+      <!-- <el-table-column type="selection" /> -->
       <el-table-column>
         <template #default="{ row }">
           <div class="article-title" :title="row.name">{{ row.name }}</div>
           <div class="article-time">{{ row.createTime }}</div>
         </template>
       </el-table-column>
+      <el-table-column show-overflow-tooltip>
+        <template #default="{ row }">
+          <span>{{ row.content.slice(0, 50) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column width="160">
         <template #default="{ row }">
           <el-button type="primary" plain @click="onRecovery(row)">编辑</el-button>
-          <el-button type="danger" @click="handleDelBtnClick(row)">删除</el-button>
+          <el-button type="danger" @click="onDelete([row])">删除</el-button>
         </template>
       </el-table-column>
+
       <template #empty>
         <el-empty class="empty" :image="nodataImage" description="没有记录" />
       </template>

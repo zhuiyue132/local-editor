@@ -32,13 +32,6 @@
     articleContent: value
   });
 
-  const searchKey = ref('');
-  const articleListAfterSearch = computed(() => {
-    const search = searchKey.value;
-    if (!search) return articleList.value;
-    return articleList.value.filter(item => item.name.includes(search));
-  });
-
   /**
    * 保存按钮点击；
    */
@@ -76,14 +69,7 @@
 </script>
 
 <template>
-  <ArticleList
-    v-if="dialogVisible"
-    :data="articleListAfterSearch"
-    :keyword="searchKey"
-    @close="dialogVisible = false"
-    @recover="onEditClick"
-    @search="val => (searchKey = val)"
-  />
+  <ArticleList v-if="dialogVisible" @close="dialogVisible = false" @recover="onEditClick" />
   <Header @save="onSaveClick" @setting="onSettingClick" @open-list="dialogVisible = true" @export="onExportClick" />
   <div id="app-content" class="markdown-body">
     <Editor
