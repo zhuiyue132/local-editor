@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-13 23:26:52
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-19 17:10:45
+ * @Last Modified time: 2022-06-23 18:57:44
  * @Desc: 文件导出;
  */
 import { computed, ref, watch, reactive } from 'vue';
@@ -11,9 +11,9 @@ import githubCssRaw from 'github-markdown-css/github-markdown-light.css?raw';
 import HTMLTemplate from '@/config/template.html?raw';
 import html2canvas from 'html2canvas';
 import PDF from 'jspdf';
-import { ElLoading } from 'element-plus'
+import { ElLoading } from 'element-plus';
 
-export default function useExport ({ articleTitle, articleContent }) {
+export default function useExport({ articleTitle, articleContent }) {
   const articleTitleDefault = `未命名`;
   const fileName = computed(() => articleTitle.value ?? articleTitleDefault);
   const loadingInstance = ref(null);
@@ -84,8 +84,8 @@ export default function useExport ({ articleTitle, articleContent }) {
     loadingInstance.value = ElLoading.service({
       lock: true,
       text: `正在导出PDF文件...`,
-      background: 'rgba(255, 255, 255, 1)',
-    })
+      background: 'rgba(255, 255, 255, 1)'
+    });
     const canvas = await html2canvas(document.querySelector('.bytemd-preview > .markdown-body'), {
       scale: window.devicePixelRatio,
       useCORS: true,
@@ -107,7 +107,7 @@ export default function useExport ({ articleTitle, articleContent }) {
     const pdfName = `${fileName.value}.pdf`;
     let position = 0;
 
-    function createImpl (canvas) {
+    function createImpl(canvas) {
       if (unRenderHeight > 0) {
         let checkCount = 0;
         if (unRenderHeight > A4PageHeight) {
