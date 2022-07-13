@@ -66,6 +66,11 @@
   };
 
   const dialogVisible = ref(false);
+
+  const sanitize = schema => {
+    schema.attributes['*'].push('style');
+    return schema;
+  };
 </script>
 
 <template>
@@ -80,6 +85,7 @@
       :preview-debounce="previewDebounce"
       :placeholder="placeholder"
       :max-length="maxLength"
+      :sanitize="sanitize"
       class="mkd-editor"
       @change="setValue"
     />
