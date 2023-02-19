@@ -9,6 +9,9 @@
   </a>
 </p>
 
+
+> 此版本已废弃，请转到vue-next分支查看。
+
 > 一个简易版的 markdown 编辑器
 
 ### 🏠 [Homepage](https://github.com/zhuiyue132/markdown-editor)
