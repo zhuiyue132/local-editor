@@ -20,9 +20,9 @@
     <el-input v-model="articleTitle" placeholder="输入文章标题..." maxlength="25" class="title" />
     <div class="right">
       <!-- 历史记录 -->
-      <el-button text class="gap" @click.stop="emit('openList')">
+      <!-- <el-button text class="gap" @click.stop="emit('openList')">
         <Icon href="A3" />
-      </el-button>
+      </el-button> -->
 
       <!-- 下载 -->
       <el-dropdown class="gap" @command="onDropdownCommand">
@@ -40,14 +40,14 @@
       </el-dropdown>
 
       <!-- 保存 -->
-      <el-button class="gap" text @click.stop="emit('save')">
+      <!-- <el-button class="gap" text @click.stop="emit('save')">
         <Icon href="A27" />
-      </el-button>
+      </el-button> -->
 
       <!-- 设置 -->
-      <el-button class="gap" text @click.stop="emit('setting')">
+      <!-- <el-button class="gap" text @click.stop="emit('setting')">
         <Icon href="A96" />
-      </el-button>
+      </el-button> -->
     </div>
   </header>
 </template>

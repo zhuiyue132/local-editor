@@ -2,7 +2,7 @@
  * @Author: chenghao
  * @Date: 2022-06-13 23:26:52
  * @Last Modified by: chenghao
- * @Last Modified time: 2022-06-23 18:57:44
+ * @Last Modified time: 2023-02-19 17:13:34
  * @Desc: 文件导出;
  */
 import { computed, ref, watch, reactive } from 'vue';
@@ -104,7 +104,7 @@ export default function useExport({ articleTitle, articleContent }) {
     const newCanvas = document.createElement('canvas');
     let height = 0;
     pdf.setDisplayMode('fullwidth', 'continuous', 'FullScreen');
-    const pdfName = `${fileName.value}.pdf`;
+    const pdfName = `${fileName.value}`;
     let position = 0;
 
     function createImpl(canvas) {
